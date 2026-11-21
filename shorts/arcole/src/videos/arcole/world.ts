@@ -65,7 +65,9 @@ function quadAt(x0: number, x1: number, z0: number, z1: number, y: number, u: nu
   return g;
 }
 /** generic quad from 4 corners (counter-clockwise seen from the front), uv tiled u x v */
-function quad4(a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, d: THREE.Vector3, u = 1, v = 1) {
+function quad4(a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, d: THREE.Vector3, u = 1, v = 1, want = V(0, 1, 0)) {
+  const nrm = b.clone().sub(a).cross(c.clone().sub(a));
+  if (nrm.dot(want) < 0) { const tmp = b; b = d; d = tmp; }
   const g = new THREE.BufferGeometry();
   g.setAttribute("position", new THREE.Float32BufferAttribute([...a.toArray(), ...b.toArray(), ...c.toArray(), ...a.toArray(), ...c.toArray(), ...d.toArray()], 3));
   g.setAttribute("uv", new THREE.Float32BufferAttribute([0, 0, u, 0, u, v, 0, 0, u, v, 0, v], 2));
@@ -90,6 +92,7 @@ export class World {
   private clouds: THREE.Mesh[] = [];
   private flags: THREE.Mesh[] = [];
   private glow: THREE.Sprite[] = [];
+  private easel = new THREE.Group();
   private frustum = new THREE.Frustum();
   private m4 = new THREE.Matrix4(); private v = new THREE.Vector3(); private sph = new THREE.Sphere();
 
@@ -134,14 +137,14 @@ export class World {
 
     setSight(sightLines());
     const b = new Batch();
-    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#c9c486" }));
-    const grass = lam("grassPlateau", () => ({ map: grassHD(), color: "#d9dba6" }));
+    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#b9b27a" }));
+    const grass = lam("grassPlateau", () => ({ map: grassHD(), color: "#c9cc92" }));
     const dirt = lam("dirtHD", () => ({ map: dirtTex() }));
     const earth = lam("earth", () => ({ map: bed(), color: "#a88a66" }));
     const wood = lam("wood", () => ({ map: beam() }));
     const deckM = lam("planksHD", () => ({ map: planksHD() }));
     const sideM = lam("deckSide", () => ({ map: beamHD() }));
-    const pool = lam("pool", () => ({ color: "#5f8f8c" }));
+    const pool = lam("pool", () => ({ color: "#4f7e77" }));
     const mudM = lam("mud", () => ({ map: mudTex() }));
     const cobble = lam("cobbleHD", () => ({ map: cobbleHD() }));
     const stone = lam("towerHD", () => ({ map: stoneHD("towerHD") }));
@@ -153,19 +156,22 @@ export class World {
     b.add(quadAt(2.2, 900, BR, 900, DK, 225, 223), grass);
     b.add(quadAt(-2.2, 2.2, BR, 900, DK + 0.01, 1, 223), dirt);
     // bank walls (earth)
-    b.add(quad4(V(-900, -1.3, -BR), V(900, -1.3, -BR), V(900, 0, -BR), V(-900, 0, -BR), 450, 1), earth);
-    b.add(quad4(V(900, -1.3, BR), V(-900, -1.3, BR), V(-900, DK, BR), V(900, DK, BR), 450, 2), earth);
+    b.add(quad4(V(-900, -1.3, -BR), V(900, -1.3, -BR), V(900, 0, -BR), V(-900, 0, -BR), 450, 1, V(0, 0, 1)), earth);
+    b.add(quad4(V(900, -1.3, BR), V(-900, -1.3, BR), V(-900, DK, BR), V(900, DK, BR), 450, 2, V(0, 0, -1)), earth);
     // ---- the dike: crest road and grassy flanks, from far behind the French to the bridge ----
     const Z0 = -420, Z1 = -BR;
     b.add(quadAt(-2, 2, Z0, Z1, DK, 1, 105), dirt);
     b.add(quad4(V(-5.5, 0, Z1), V(-5.5, 0, Z0), V(-2, DK, Z0), V(-2, DK, Z1), 103, 1), grass);
     b.add(quad4(V(2, DK, Z1), V(2, DK, Z0), V(5.5, 0, Z0), V(5.5, 0, Z1), 103, 1), grass);
-    b.add(quad4(V(-5.5, 0, Z1), V(-2, DK, Z1), V(2, DK, Z1), V(5.5, 0, Z1), 1, 1), earth);
+    b.add(quad4(V(-5.5, 0, Z1), V(-2, DK, Z1), V(2, DK, Z1), V(5.5, 0, Z1), 1, 1, V(0, 0, 1)), earth);
     // ---- marsh pools + the mud pool ----
     for (let i = 0; i < 40; i++) {
       const s = rand(i), x = (s < 0.5 ? -1 : 1) * (9 + rand(i + 1) * 70), z = -14 - rand(i + 2) * 110, w = 4 + rand(i + 3) * 9, d = 3 + rand(i + 4) * 6;
       if (x > MUD.x0 - 3 && x < MUD.x1 + 3 && z > MUD.z0 - 3 && z < MUD.z1 + 3) continue;
-      b.add(quadAt(x - w / 2, x + w / 2, z - d / 2, z + d / 2, 0.025, 1, 1), pool);
+      const pg = new THREE.CircleGeometry(1, 20); pg.rotateX(-Math.PI / 2);
+      const pp = pg.attributes.position as THREE.BufferAttribute;
+      for (let k = 1; k < pp.count; k++) { const s2 = 0.8 + 0.35 * rand(i * 17 + k); pp.setXYZ(k, pp.getX(k) * s2, 0, pp.getZ(k) * s2); }
+      b.add(pg, pool, new THREE.Matrix4().compose(V(x, 0.025, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), rand(i + 6) * 3), V(w / 2, 1, d / 2)));
     }
     b.add(quadAt(MUD.x0, MUD.x1, MUD.z0, MUD.z1, 0.04, 2, 3), mudM);
     // ---- the bridge: plank deck, side beams, rails, piers ----
@@ -220,19 +226,23 @@ export class World {
     }
     // ---- the painter's easel (painting faces -z, toward the painter) ----
     const [ex, ey, ez] = EASEL;
+    const legs: THREE.BufferGeometry[] = [];
     for (const [dx, dz] of [[-0.55, 0.12], [0.55, 0.12], [0, 0.75]] as const) {
       const a = V(ex + dx * 0.25, ey + 2.0, ez + 0.05), c = V(ex + dx, ey, ez + dz);
       const g = new THREE.BoxGeometry(0.06, a.distanceTo(c), 0.06);
       g.applyMatrix4(new THREE.Matrix4().compose(a.clone().add(c).multiplyScalar(0.5), new THREE.Quaternion().setFromUnitVectors(V(0, 1, 0), a.clone().sub(c).normalize()), V(1, 1, 1)));
-      b.add(g, wood);
+      legs.push(g);
     }
-    b.add(boxGeo(V(ex - 0.72, ey + 0.86, ez - 0.02), V(ex + 0.72, ey + 0.93, ez + 0.14)), wood);
-    b.add(boxGeo(V(ex - 0.68, ey + 0.93, ez + 0.03), V(ex + 0.68, ey + 1.99, ez + 0.08)), wood);
     b.build(R);
+    const eb = new Batch();
+    eb.add(boxGeo(V(ex - 0.72, ey + 0.86, ez - 0.02), V(ex + 0.72, ey + 0.93, ez + 0.14)), wood);
+    eb.add(boxGeo(V(ex - 0.68, ey + 0.93, ez + 0.03), V(ex + 0.68, ey + 1.99, ez + 0.08)), wood);
+    for (const g of legs) eb.add(g, wood);
+    eb.build(this.easel); R.add(this.easel);
     const paintM = new THREE.MeshBasicMaterial({ map: ctex("painting", 1000, 780, (g) => fxPainting(new Pen(g))), color: 0xe8e8e8 });
     const painting = new THREE.Mesh(new THREE.PlaneGeometry(1.36, 1.06), paintM);
     painting.position.set(ex, ey + 1.46, ez + 0.02); painting.rotation.y = Math.PI; painting.layers.set(NOINK);
-    R.add(painting);
+    this.easel.add(painting);
 
     // ---- reeds: crossed cut-out cards, two-tone lit, left out where they block a shot's subject ----
     const reedMats = [0, 1, 2].map((k) => lam("reedM" + k, () => ({ map: reedTex(k), alphaTest: 0.5, side: THREE.DoubleSide })));
@@ -364,6 +374,7 @@ export class World {
       mat.map = this.cloudMaps[s.light][i % 4];
     }
     for (const g of this.glow) g.visible = s.light === "night";
+    this.easel.visible = id >= 14;
     const W = this.WU, wc = K.water;
     untone(wc.near, W.wNearC.value); untone(wc.mid, W.wMidC.value); untone(wc.far, W.wFarC.value);
     untone(wc.crest, W.wCrest.value); untone(wc.trough, W.wTrough.value); untone(wc.glint, W.wGlint.value);

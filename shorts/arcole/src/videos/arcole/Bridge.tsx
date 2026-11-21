@@ -61,7 +61,7 @@ const Scene: React.FC<{ id: number; f: number }> = ({ id, f }) => {
   useLayoutEffect(() => { invalidate(); }, [id, f, world, invalidate]);
 
   const post = useMemo(() => (
-    <EffectComposer multisampling={4}>
+    <EffectComposer multisampling={2}>
       <primitive object={fx.ink} dispose={null} />
       <primitive object={fx.lens.pre} dispose={null} />
       <primitive object={fx.lens.main} dispose={null} />

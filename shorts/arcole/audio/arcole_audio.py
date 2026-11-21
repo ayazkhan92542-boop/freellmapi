@@ -324,7 +324,7 @@ def main():
     mix = V + M2 + S2
     L = integrated(mix)
     g = dbg(-15.0 - L)
-    out = limiter(mix * g, -1.2)
+    out = limiter(mix * g, -2.0)
     out = out[:, :N]
     write_wav(os.path.join(HERE, "mix.wav"), out)
     write_wav(os.path.join(HERE, "stem_voice.wav"), V * g)
