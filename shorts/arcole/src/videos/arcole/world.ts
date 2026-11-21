@@ -137,8 +137,8 @@ export class World {
 
     setSight(sightLines());
     const b = new Batch();
-    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#b9b27a" }));
-    const grass = lam("grassPlateau", () => ({ map: grassHD(), color: "#c9cc92" }));
+    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#a9a272" }));
+    const grass = lam("grassPlateau", () => ({ map: grassHD(), color: "#aeb87e" }));
     const dirt = lam("dirtHD", () => ({ map: dirtTex() }));
     const earth = lam("earth", () => ({ map: bed(), color: "#a88a66" }));
     const wood = lam("wood", () => ({ map: beam() }));
@@ -150,19 +150,19 @@ export class World {
     const stone = lam("towerHD", () => ({ map: stoneHD("towerHD") }));
     // ---- marsh (near side), river bed, far plateau ----
     b.add(quadAt(-900, -5.5, -900, -BR, 0, 225, 223), marsh);
-    b.add(quadAt(5.5, 900, -900, -BR, 0, 224, 223), marsh);
-    b.add(quadAt(-900, 900, -BR, BR, -1.3, 225, 4), earth);
+    b.add(quadAt(5.5, 300, -900, -BR, 0, 74, 223), marsh);
+    b.add(quadAt(-900, 300, -BR, BR, -1.3, 150, 4), earth);
     b.add(quadAt(-900, -2.2, BR, 900, DK, 225, 223), grass);
-    b.add(quadAt(2.2, 900, BR, 900, DK, 225, 223), grass);
+    b.add(quadAt(2.2, 300, BR, 900, DK, 74, 223), grass);
     b.add(quadAt(-2.2, 2.2, BR, 900, DK + 0.01, 1, 223), dirt);
     // bank walls (earth)
-    b.add(quad4(V(-900, -1.3, -BR), V(900, -1.3, -BR), V(900, 0, -BR), V(-900, 0, -BR), 450, 1, V(0, 0, 1)), earth);
-    b.add(quad4(V(900, -1.3, BR), V(-900, -1.3, BR), V(-900, DK, BR), V(900, DK, BR), 450, 2, V(0, 0, -1)), earth);
+    b.add(quad4(V(-900, -1.3, -BR), V(300, -1.3, -BR), V(300, 0, -BR), V(-900, 0, -BR), 300, 1, V(0, 0, 1)), earth);
+    b.add(quad4(V(300, -1.3, BR), V(-900, -1.3, BR), V(-900, DK, BR), V(300, DK, BR), 300, 2, V(0, 0, -1)), earth);
     // ---- the dike: crest road and grassy flanks, from far behind the French to the bridge ----
     const Z0 = -420, Z1 = -BR;
     b.add(quadAt(-2, 2, Z0, Z1, DK, 1, 105), dirt);
-    b.add(quad4(V(-5.5, 0, Z1), V(-5.5, 0, Z0), V(-2, DK, Z0), V(-2, DK, Z1), 103, 1), grass);
-    b.add(quad4(V(2, DK, Z1), V(2, DK, Z0), V(5.5, 0, Z0), V(5.5, 0, Z1), 103, 1), grass);
+    b.add(quad4(V(-5.5, 0, Z1), V(-5.5, 0, Z0), V(-2, DK, Z0), V(-2, DK, Z1), 103, 1), marsh);
+    b.add(quad4(V(2, DK, Z1), V(2, DK, Z0), V(5.5, 0, Z0), V(5.5, 0, Z1), 103, 1), marsh);
     b.add(quad4(V(-5.5, 0, Z1), V(-2, DK, Z1), V(2, DK, Z1), V(5.5, 0, Z1), 1, 1, V(0, 0, 1)), earth);
     // ---- marsh pools + the mud pool ----
     for (let i = 0; i < 40; i++) {
@@ -298,7 +298,7 @@ export class World {
         .replace("#include <lights_fragment_end>", "#include <lights_fragment_end>\n  reflectedLight.directDiffuse = diffuseColor.rgb * mix(wShade, vec3(1.0), sunVis);\n  reflectedLight.indirectDiffuse = vec3(0.0);");
     };
     waterM.customProgramCacheKey = () => "river1";
-    const wm = new THREE.Mesh(quadAt(-900, 900, -BR, BR, -0.6, 1, 1), waterM);
+    const wm = new THREE.Mesh(quadAt(-900, 300, -BR, BR, -0.6, 1, 1), waterM);
     wm.receiveShadow = true;
     R.add(wm);
     // tricolour pennant on the French side and an Austrian flag on the bell tower side

@@ -291,7 +291,7 @@ const austrianLine = (cam: CamInfo, t: number, out: Stage, o: { aim?: number; vo
   let i = 0;
   for (const z of AUS_Z) for (let k = 0; k < 7; k++, i++) {
     const x = -3.6 + k * 1.2 + (z === AUS_Z[1] ? 0.6 : 0) + (hh(i, 7) - 0.5) * 0.2, who = auW(i);
-    const aiming = o.aim !== undefined && t >= o.aim && z === AUS_Z[0];
+    const aiming = o.aim !== undefined && t >= o.aim;
     const view = viewOf(cam, x, z, 0, -1);
     const so: SideOpts = { mode: "stand", expr: o.expr ?? "stern", blink: lidAt(t, who.i), aim: aiming };
     out.places.push(person(cam, who, x, DK, z, aiming ? { side: true, mirror: view.mirror } : FRONT, { mode: "stand", expr: o.expr ?? "stern", blink: lidAt(t, who.i) }, so));
@@ -309,7 +309,7 @@ const column = (cam: CamInfo, t: number, out: Stage, z0: number, rows: number, d
   }
 };
 const reedRiders = (cam: CamInfo, t: number, out: Stage, x0: number, z: number, dir: number, n: number, trumpets: boolean, rate = 1.8) => {
-  for (let i = 0; i < n; i++) horse(cam, out, i, x0 - dir * i * 2.9, z + (hh(i, 9) - 0.5) * 1.2, dir, 0, t, { rate, trumpet: trumpets && i < 4, expr: i < 4 ? "grin" : "stern" });
+  for (let i = 0; i < n; i++) horse(cam, out, i, x0 - dir * i * 2.4, z + (hh(i, 9) - 0.5) * 1.2, dir, 0, t, { rate, trumpet: trumpets && i < 4, expr: i < 4 ? "grin" : "stern" });
 };
 
 // ---------------- per shot ----------------
@@ -412,7 +412,7 @@ const panic = (cam: CamInfo, t: number, out: Stage) => {
 };
 const reeds = (cam: CamInfo, t: number, out: Stage) => {
   if (t < 48.0) return;
-  stand(cam, out, auW(2), -24, -17.4, { expr: t < 49.3 ? "nervous" : "shock", prop: "ear", look: 1, blink: lidAt(t, 302) }, 0);
+  stand(cam, out, { i: 302, o: austrian(2, { rifle: false }), okey: "auE2" }, -24, -17.4, { expr: t < 49.3 ? "nervous" : "shock", prop: "ear", look: 1, blink: lidAt(t, 302) }, 0);
   notes(out, cam, t, -25.3, 1.9, -17.2, 4, 1);
 };
 const street = (cam: CamInfo, t: number, out: Stage) => {
@@ -433,11 +433,11 @@ const street = (cam: CamInfo, t: number, out: Stage) => {
 };
 const regiment = (cam: CamInfo, t: number, out: Stage) => {
   for (let i = 0; i < 4; i++) horse(cam, out, i, 20 + i * 3.4, -17 + (i % 2) * 1.2, 1, 0, t, { trumpet: true, expr: "grin" });
-  stand(cam, out, auW(5), 1.5, 7.9, { expr: t >= 57.4 ? "shock" : "nervous", prop: "ear", look: -1, blink: lidAt(t, 305) });
+  stand(cam, out, { i: 305, o: austrian(1, { rifle: false }), okey: "auE1" }, 9.5, 10.6, { expr: t >= 57.4 ? "shock" : "nervous", prop: "ear", look: -1, blink: lidAt(t, 305) });
   if (t >= 57.49 - L2) for (let i = 0; i < 26; i++) {
     const g = smooth((t - 57.42 - hh(i, 8) * 0.35) / 0.25);
     if (g <= 0.02) continue;
-    horse(cam, out, 40 + i, 6 + (i % 13) * 3.6 + hh(i) * 1.5, -24 - Math.floor(i / 13) * 4 - hh(i, 2) * 1.5, 1, 0, t, { ghost: "#2a2246", scale: 1.7 * g });
+    horse(cam, out, 40 + i, 10 + (i % 13) * 3.2 + hh(i) * 1.5, -21 - Math.floor(i / 13) * 3.5 - hh(i, 2) * 1.5, 1, 0, t, { ghost: "#2a2246", scale: 2.1 * g });
   }
 };
 const painter = (cam: CamInfo, t: number, out: Stage) => {

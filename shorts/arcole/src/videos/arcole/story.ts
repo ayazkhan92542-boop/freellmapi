@@ -42,7 +42,7 @@ export const NAP_FALL = { x0: 1.1, x1: 8.6, z: -27.6 };
 export const SINK = -1.22;
 export const napRise = (t: number) => SINK + (-0.25 - SINK) * smooth((t - 31.55) / 0.75);
 /** the flanking riders through the reeds (shot 8a) */
-export const rideX = (t: number) => 6 + 3.2 * (t - 34.0);
+export const rideX = (t: number) => 18 + 3.2 * (t - 34.0);
 export const RIDERS = 8;
 
 // ---------------- shots ----------------
@@ -55,6 +55,7 @@ const CUTS = [0, 131, 385, 570, 663, 830, 980, 1033, 1176, 1248, 1349, 1508, 166
 export const SHOTS: ShotDef[] = C.map(([crowd, light], i) => ({ id: i + 1, a: CUTS[i], b: CUTS[i + 1], light, crowd, tau: (t: number) => t }));
 SHOTS[1].sunAz = 110; // establishing aerial: front-lit
 SHOTS[11].sunAz = 40; SHOTS[11].sunEl = 25; // night street: moon ahead-right
+for (const i of [6, 7, 8, 9, 13, 14]) { SHOTS[i].sunAz = 125; SHOTS[i].sunEl = 14; } // golden: low side-front sun, faces readable
 /** crossfades (frames) at place/time changes; a white 4-frame flash after the hook */
 export const XFADE: Record<number, number> = { 7: 8, 11: 8, 12: 8, 13: 8, 14: 8 };
 export const FLASH_AT = 131;
@@ -117,21 +118,22 @@ const CAMS: Record<number, Key[]> = {
     { f: 127, s: (f) => zoom([46, 34, -92], [2, 0, -12], 44, pushK(f, 127, 0.0018)) }, // the swamp, the dike, the bridge, the village
     { f: 226, cut: true, s: (f) => dolly([1.0, DK + 1.8, -34.6], [0, DK + 1.15, -40], pushK(f, 226, 0.0025), { fov: 40 }) }, // Napoleon + hungry army
     { f: 290, dur: 24, s: (f) => dolly([1.8, DK + 1.7, -34.0], [0.4, DK + 1.1, -41], pushK(f, 300, 0.0025), { fov: 42, roll: -0.03 }) },
-    { f: 324, cut: true, s: (f) => zoom([4.6, DK + 1.9, -46], [0, DK + 0.4, -2], 36, pushK(f, 324, 0.0025, 0.007, 30)) }, // one tiny bridge
+    { f: 324, cut: true, s: (f) => zoom([1.2, DK + 2.1, -31], [0, DK + 0.6, 0], 34, pushK(f, 324, 0.0025, 0.007, 30)) }, // one tiny bridge
   ],
   3: [
-    { f: 385, s: (f) => { const F = colFront(T(f)); return dolly([8.5, DK + 0.9, F - 2], [0, DK + 1.0, F + 1.5], pushK(f, 385, 0.0015), { fov: 44 }); } }, // charge, tracking
-    { f: 448, dur: 30, s: (f) => { const F = colFront(T(f)); return dolly([5.5, DK + 2.6, F - 7], [0, DK + 0.6, F + 12], pushK(f, 448, 0.002), { fov: 46, roll: 0.03 }); } },
-    { f: 496, cut: true, s: (f) => zoom([-12.5, DK + 2.4, 1.5], [0, DK + 0.9, 4], 50, pushK(f, 496, 0.002)) }, // the Austrians shove them back
+    { f: 385, s: (f) => { const F = colFront(T(f)); return dolly([6.0, DK + 1.2, F - 1], [0, DK + 1.0, F - 3], pushK(f, 385, 0.0015), { fov: 46 }); } }, // charge, tracking
+    { f: 448, dur: 30, s: (f) => { const F = colFront(T(f)); return dolly([4.5, DK + 3.0, F - 9], [0, DK + 0.6, F + 6], pushK(f, 448, 0.002), { fov: 48, roll: 0.03 }); } },
+    { f: 496, cut: true, s: (f) => dolly([-6.5, DK + 1.55, 10.2], [0, DK + 1.35, 12.6], pushK(f, 496, 0.0025), { fov: 44 }) }, // Austrian volley
+    { f: 540, cut: true, s: (f) => dolly([8.5, DK + 1.3, -15.5], [0, DK + 1.1, -12.5], pushK(f, 540, 0.002), { fov: 46, roll: -0.03 }) }, // shoved right back
   ],
   4: [
     { f: 570, s: (f) => dolly([0.7, DK + 1.75, -35.1], [0, DK + 1.45, -40], pushK(f, 570, 0.003, 0.007, 30), { fov: 40 }) },
     { f: 619, cut: true, s: (f) => { const z = napZ(T(f)); return { pos: [1.1, DK + 0.75, z + 5.2], look: [0, DK + 1.55, z], fov: 42, roll: -0.04 }; } },
   ],
   5: [
-    { f: 663, s: (f) => dolly([-6.5, DK + 1.55, 10.2], [0, DK + 1.35, 12.6], pushK(f, 663, 0.0025), { fov: 44 }) }, // volley
+    { f: 663, s: (f) => dolly([6.5, DK + 1.55, 10.0], [0, DK + 1.35, 12.6], pushK(f, 663, 0.0025), { fov: 44 }) }, // volley
     { f: 707, cut: true, s: (f) => dolly([1.2, DK + 1.7, -19.4], [-0.1, DK + 1.15, -24], pushK(f, 707, 0.0025), { fov: 44 }) }, // the aide
-    { f: 763, cut: true, s: (f) => zoom([15, DK + 0.4, -31.5], [3, DK - 0.4, -27.6], 46, pushK(f, 763, 0.0015)) }, // swept off the dike
+    { f: 763, cut: true, s: (f) => zoom([11.5, DK + 1.2, -33.5], [3.5, DK - 0.3, -27.6], 48, pushK(f, 763, 0.0015)) }, // swept off the dike
   ],
   6: [
     { f: 830, s: (f) => dolly([8.2, 0.62, -25.1], [8.6, 0.3, -27.6], pushK(f, 830, 0.0022, 0.006, 30), { fov: 40 }) }, // up to his neck
@@ -139,8 +141,8 @@ const CAMS: Record<number, Key[]> = {
   ],
   7: [{ f: 976, s: (f) => dolly([0.8, DK + 1.75, -40.2], [0, DK + 1.45, -45], pushK(f, 976, 0.003, 0.007, 30), { fov: 40 }) }],
   8: [
-    { f: 1033, s: (f) => { const x = rideX(T(f)) - 9; return { pos: [x, 1.6, RIDE_Z - 9.5], look: [x + 0.8, 1.45, RIDE_Z], fov: 44 }; } },
-    { f: 1123, cut: true, s: (f) => zoom([24, 15, 58], [8, DK, 18], 44, pushK(f, 1123, 0.002)) }, // behind the Austrian lines
+    { f: 1033, s: (f) => { const x = rideX(T(f)) - 6; return { pos: [x, 1.9, RIDE_Z - 9.5], look: [x + 0.8, 1.3, RIDE_Z], fov: 46 }; } },
+    { f: 1123, cut: true, s: (f) => zoom([30, 14, 56], [16, DK, 22], 46, pushK(f, 1123, 0.002)) }, // behind the Austrian lines
   ],
   9: [
     { f: 1176, s: (f) => dolly([35.5, DK + 2.2, BLOW_Z - 3.2], [27.5, DK + 2.1, BLOW_Z - 1.4], pushK(f, 1176, 0.0025, 0.007, 35), { fov: 42, roll: -0.04 }) },
@@ -149,7 +151,7 @@ const CAMS: Record<number, Key[]> = {
   10: [
     { f: 1248, s: (f) => dolly([0.5, DK + 1.7, 7.8], [0, DK + 1.15, 12], pushK(f, 1248, 0.003), { fov: 42 }) },
     { f: 1306, dur: 18, s: (f) => dolly([0.3, DK + 1.7, 8.6], [0, DK + 1.3, 12], pushK(f, 1306, 0.002), { fov: 40, roll: 0.04 }) },
-    { f: 1322, cut: true, s: (f) => zoom([-15, DK + 3.0, 10], [0, DK + 1.2, 20], 46, pushK(f, 1322, 0.002)) }, // pull back
+    { f: 1322, cut: true, s: (f) => zoom([-9, DK + 2.4, 13], [0, DK + 1.0, 19], 46, pushK(f, 1322, 0.002)) }, // pull back
   ],
   11: [
     { f: 1345, s: (f) => { const k = (f - 1345) * 0.035; return { pos: [-24, 1.35, -27 + k], look: [-24, 1.3, -17 + k], fov: 44, roll: 0.02 }; } }, // inside the reeds
@@ -161,8 +163,8 @@ const CAMS: Record<number, Key[]> = {
     { f: 1621, cut: true, s: (f) => { const z = walkZ(T(f)); return dolly([STREET_X + 1.0, 1.4, z - 6.4], [STREET_X, 2.2, z + 3], pushK(f, 1621, 0.002), { fov: 46, roll: 0.04 }); } },
   ],
   13: [
-    { f: 1657, s: (f) => zoom([-1.5, DK + 1.6, 9.6], [24, 1.2, -20], 34, pushK(f, 1657, 0.0018)) },
-    { f: 1715, dur: 24, s: (f) => zoom([-1.5, DK + 1.6, 9.6], [26, 2.4, -22], 44, pushK(f, 1715, 0.002), { roll: -0.03 }) },
+    { f: 1657, s: (f) => zoom([6.5, DK + 1.8, 9.2], [24, 1.2, -19], 34, pushK(f, 1657, 0.0018)) },
+    { f: 1715, dur: 24, s: (f) => zoom([6.5, DK + 1.8, 9.2], [24, 2.6, -21], 46, pushK(f, 1715, 0.002), { roll: -0.03 }) },
   ],
   14: [
     { f: 1750, s: (f) => dolly([4.6, DK + 1.7, -19.6], [0.8, DK + 1.35, -15.9], pushK(f, 1750, 0.002), { fov: 42 }) },
