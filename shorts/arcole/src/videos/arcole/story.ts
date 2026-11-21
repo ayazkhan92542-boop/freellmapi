@@ -124,7 +124,7 @@ const CAMS: Record<number, Key[]> = {
     { f: 385, s: (f) => { const F = colFront(T(f)); return dolly([6.0, DK + 1.2, F - 1], [0, DK + 1.0, F - 3], pushK(f, 385, 0.0015), { fov: 46 }); } }, // charge, tracking
     { f: 448, dur: 30, s: (f) => { const F = colFront(T(f)); return dolly([4.5, DK + 3.0, F - 9], [0, DK + 0.6, F + 6], pushK(f, 448, 0.002), { fov: 48, roll: 0.03 }); } },
     { f: 496, cut: true, s: (f) => dolly([-6.5, DK + 1.55, 10.2], [0, DK + 1.35, 12.6], pushK(f, 496, 0.0025), { fov: 44 }) }, // Austrian volley
-    { f: 540, cut: true, s: (f) => dolly([8.5, DK + 1.3, -15.5], [0, DK + 1.1, -12.5], pushK(f, 540, 0.002), { fov: 46, roll: -0.03 }) }, // shoved right back
+    { f: 540, cut: true, s: (f) => { const F = colFront(T(f)); return dolly([8.5, DK + 1.6, F - 6.5], [0, DK + 1.0, F - 5], pushK(f, 540, 0.002), { fov: 48, roll: -0.03 }); } }, // shoved right back
   ],
   4: [
     { f: 570, s: (f) => dolly([0.7, DK + 1.75, -35.1], [0, DK + 1.45, -40], pushK(f, 570, 0.003, 0.007, 30), { fov: 40 }) },
@@ -133,7 +133,7 @@ const CAMS: Record<number, Key[]> = {
   5: [
     { f: 663, s: (f) => dolly([6.5, DK + 1.55, 10.0], [0, DK + 1.35, 12.6], pushK(f, 663, 0.0025), { fov: 44 }) }, // volley
     { f: 707, cut: true, s: (f) => dolly([1.2, DK + 1.7, -19.4], [-0.1, DK + 1.15, -24], pushK(f, 707, 0.0025), { fov: 44 }) }, // the aide
-    { f: 763, cut: true, s: (f) => zoom([11.5, DK + 1.2, -33.5], [3.5, DK - 0.3, -27.6], 48, pushK(f, 763, 0.0015)) }, // swept off the dike
+    { f: 763, cut: true, s: (f) => zoom([15, DK + 3.6, -37], [4.5, 1.0, -27.6], 50, pushK(f, 763, 0.0015)) }, // swept off the dike
   ],
   6: [
     { f: 830, s: (f) => dolly([8.2, 0.62, -25.1], [8.6, 0.3, -27.6], pushK(f, 830, 0.0022, 0.006, 30), { fov: 40 }) }, // up to his neck
@@ -142,7 +142,7 @@ const CAMS: Record<number, Key[]> = {
   7: [{ f: 976, s: (f) => dolly([0.8, DK + 1.75, -40.2], [0, DK + 1.45, -45], pushK(f, 976, 0.003, 0.007, 30), { fov: 40 }) }],
   8: [
     { f: 1033, s: (f) => { const x = rideX(T(f)) - 6; return { pos: [x, 1.9, RIDE_Z - 9.5], look: [x + 0.8, 1.3, RIDE_Z], fov: 46 }; } },
-    { f: 1123, cut: true, s: (f) => zoom([30, 14, 56], [16, DK, 22], 46, pushK(f, 1123, 0.002)) }, // behind the Austrian lines
+    { f: 1123, cut: true, s: (f) => zoom([40, 12, 50], [20, DK, 24], 46, pushK(f, 1123, 0.002)) }, // behind the Austrian lines
   ],
   9: [
     { f: 1176, s: (f) => dolly([35.5, DK + 2.2, BLOW_Z - 3.2], [27.5, DK + 2.1, BLOW_Z - 1.4], pushK(f, 1176, 0.0025, 0.007, 35), { fov: 42, roll: -0.04 }) },
