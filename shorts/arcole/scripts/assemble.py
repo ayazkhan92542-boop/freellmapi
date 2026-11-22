@@ -9,7 +9,7 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FR = os.path.join(ROOT, "out", "frames")
-TOTAL, FPS, THR = 2054, 30, 3.5
+TOTAL, FPS, THR = 2054, 30, 10.0
 CUTS = [0, 131, 385, 570, 663, 830, 980, 1033, 1176, 1248, 1349, 1508, 1661, 1754, 1854]
 CAMCUTS = [50, 226, 324, 496, 540, 619, 707, 763, 921, 1123, 1322, 1442, 1578, 1621, 1988]
 XFADE = {980: 8, 1349: 8, 1508: 8, 1661: 8, 1754: 8}
