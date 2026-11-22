@@ -381,11 +381,11 @@ const land = (cam: CamInfo, t: number, out: Stage) => {
     out.places.push(...[]); bird(cam, out, { i: 0, view: "side", x: bx, y: BOARD_Y, z: bz, dx: 1, expr: k > 0 ? "shock" : "dazed", eye: "patch", leg: "two", capsule: true, blink: t });
     if (k > 0) out.places[out.places.length - 1].sq = [1 + 0.3 * k, 1 - 0.28 * k];
   }
-  if (t >= 32.0 && t < 35.4) {
+  if (t >= 32.0 && t < 35.6) {
     stand(cam, out, SIG, LOFT[0] + 0.2, LOFT[2] - 3.8, { expr: t > 33.4 ? "shock" : "neutral", prop: "hold", blink: lidAt(t, 51) });
     if (t >= 32.5) out.fx.push({ key: "msg", cw: 400, ch: 260, draw: fxMessage, x: LOFT[0] + 0.15, y: 1.33, z: LOFT[2] - 4.05, w: 0.5, h: 0.33 });
   }
-  if (t >= 35.4) {
+  if (t >= 35.6) {
     stand(cam, out, { i: 52, o: { ...MAJOR, build: "stout", moustache: "#5a3b2a" }, okey: "col" }, HQ[0] - 6, HQ[2] + 9, { expr: t > 36.8 ? "shock" : "stern", prop: "phone", blink: lidAt(t, 52) });
     if (t > 36.8) burst(out, t, 36.84 - L2, HQ[0] - 5.6, 2.0, HQ[2] + 8.8, 0.9, 0.35);
   }
