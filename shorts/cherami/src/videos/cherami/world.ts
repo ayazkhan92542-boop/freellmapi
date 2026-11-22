@@ -33,6 +33,13 @@ const dirtTex = () => ctex("dirtHD", 1024, 1024, (g, r) => {
   for (let i = 0; i < 900; i++) { const x = r() * 1024, y = r() * 1024, s = 3 + r() * 10; g.fillStyle = r() < 0.5 ? "rgba(120,85,50,.25)" : "rgba(230,200,150,.25)"; g.beginPath(); g.ellipse(x, y, s, s * 0.6, r() * 3, 0, 7); g.fill(); }
   for (let i = 0; i < 14; i++) { const x = 160 + r() * 700; g.strokeStyle = "rgba(110,80,50,.25)"; g.lineWidth = 10 + r() * 14; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + (r() - 0.5) * 80, 1024); g.stroke(); }
 });
+const leafTex = () => ctex("leafLitter", 1024, 1024, (g, r) => {
+  g.fillStyle = "#a88655"; g.fillRect(0, 0, 1024, 1024);
+  for (let i = 0; i < 1400; i++) {
+    const x = r() * 1024, y = r() * 1024, s = 6 + r() * 12, c = ["#d98a3a", "#c8602e", "#e2b046", "#9a6a3a", "#b07a3a", "#8f9a4a"][Math.floor(r() * 6)];
+    g.fillStyle = c; g.beginPath(); g.ellipse(x, y, s, s * 0.5, r() * 3.1, 0, 7); g.fill();
+  }
+});
 const mudTex = () => ctex("mudHD", 512, 512, (g, r) => {
   g.fillStyle = "#5d4630"; g.fillRect(0, 0, 512, 512);
   for (let i = 0; i < 160; i++) { const x = r() * 512, y = r() * 512, s = 6 + r() * 22; g.fillStyle = r() < 0.5 ? "rgba(40,28,18,.35)" : "rgba(140,110,70,.3)"; g.beginPath(); g.ellipse(x, y, s, s * 0.5, 0, 0, 7); g.fill(); }
@@ -141,9 +148,11 @@ export class World {
       this.clouds.push(m); R.add(m);
     }
 
-    setSight(sightLines());
+    const rays = sightLines();
+    setSight(rays);
+    const nearLens = (x: number, z: number, r = 4) => rays.some((q) => Math.hypot(q.o.x - x, q.o.z - z) < r);
     const b = new Batch();
-    const litter = lam("litter", () => ({ map: grassHD(), color: "#c9a66a" }));
+    const litter = lam("litter", () => ({ map: leafTex() }));
     const grass = lam("grassHQ", () => ({ map: grassHD(), color: "#b9c48a" }));
     const dirt = lam("dirtHD", () => ({ map: dirtTex() }));
     const wood = lam("wood", () => ({ map: beam() }));
@@ -164,18 +173,19 @@ export class World {
     }
     for (let i = 0; i < 260; i++) {
       const a = rand(i * 1.7) * Math.PI * 2, r = 10 + rand(i * 3.1) * 120, x = Math.cos(a) * r, z = Math.sin(a) * r;
+      if (nearLens(x, z, 5)) continue;
       prop(b, {} as Kit, rand(i * 5.3) < 0.55 ? "tree_oak" : rand(i * 7.1) < 0.5 ? "tree" : "tree_fat", x, 0, z, 9 + rand(i * 2.3) * 7);
     }
-    for (let i = 0; i < 70; i++) { const a = rand(i * 9.1) * Math.PI * 2, r = 8 + rand(i * 4.7) * 14; prop(b, {} as Kit, "plant_bush", Math.cos(a) * r, 0, Math.sin(a) * r, 1.2 + rand(i) * 0.6); }
+    for (let i = 0; i < 70; i++) { const a = rand(i * 9.1) * Math.PI * 2, r = 8 + rand(i * 4.7) * 14; if (nearLens(Math.cos(a) * r, Math.sin(a) * r, 4.5)) continue; prop(b, {} as Kit, "plant_bush", Math.cos(a) * r, 0, Math.sin(a) * r, 1.2 + rand(i) * 0.6); }
     // ---- HQ field (x = 300): pigeon loft with a landing board, tents, flag poles, ceremony table ----
     b.add(quadAt(150, 450, -150, 150, 0, 40, 40), grass);
     b.add(quadAt(HQ[0] - 2, HQ[0] + 2, -40, 40, 0.01, 1, 20), dirt);
     const [lx, , lz] = LOFT;
-    house(b, lx, lz, Math.PI, 6, 5, 3.6, 4, 0);
+    setSight([]); house(b, lx, lz, Math.PI, 6, 5, 3.6, 4, 0); setSight(rays); // the loft is the subject: never culled
     b.add(boxGeo(V(lx - 1.6, BOARD_Y - 0.12, lz - 2.95), V(lx + 1.6, BOARD_Y, lz - 2.45)), wood);
     for (const s of [-1, 1]) b.add(boxGeo(V(lx + s * 1.5 - 0.05, BOARD_Y - 0.9, lz - 2.9), V(lx + s * 1.5 + 0.05, BOARD_Y, lz - 2.8)), wood);
     b.add(boxGeo(V(lx - 1.4, BOARD_Y, lz - 2.55), V(lx + 1.4, BOARD_Y + 0.7, lz - 2.45)), lam("coop", () => ({ color: "#3a2a1e" })));
-    for (const [x, z] of [[-10, 12], [-12, 20], [9, 26], [12, 6], [-14, 4]] as const) {
+    for (const [x, z] of [[-14, 16], [-13, 25], [9, 28], [14, 8], [-17, 5]] as const) {
       const g = new THREE.ConeGeometry(2.4, 2.8, 4, 1, true); g.rotateY(Math.PI / 4); g.translate(HQ[0] + x, 1.4, HQ[2] + z); b.add(g, canvas);
     }
     b.add(boxGeo(V(TABLE[0] - 0.75, 0, TABLE[2] - 0.45), V(TABLE[0] + 0.75, 0.95, TABLE[2] + 0.45)), lam("tableCloth", () => ({ color: "#2f4f9a" })));

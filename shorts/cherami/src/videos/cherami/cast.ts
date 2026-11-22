@@ -284,13 +284,15 @@ const germansRing = (cam: CamInfo, t: number, out: Stage, aim = false, fire?: nu
     const a = -0.4 + (i / 17) * (Math.PI + 0.8), r = 15 + 5 * hh(i, 3), x = Math.cos(a) * r * 1.1, z = 3 + Math.sin(a) * r;
     const who: Who = { i: 200 + i, o: GE[i % 3], okey: `ge${i % 3}` };
     if (aim) {
-      const view = viewOf(cam, x, z, 1, 0);
-      out.places.push({ ...person(cam, who, x, 0, z, { side: true, mirror: view.mirror }, {}, { mode: "stand", expr: "stern", aim: true, blink: lidAt(t, who.i) }), roll: view.mirror ? -0.45 : 0.45 });
-      blob(out, x, 0, z);
+      if (i >= 7) continue;
+      const x2 = -7.4 + i * 1.15, z2 = 18.6 + (i % 2) * 1.3;
+      const view = viewOf(cam, x2, z2, 1, 0);
+      out.places.push({ ...person(cam, who, x2, 0, z2, { side: true, mirror: view.mirror }, {}, { mode: "stand", expr: "stern", aim: true, blink: lidAt(t, who.i) }), roll: view.mirror ? -0.35 : 0.35 });
+      blob(out, x2, 0, z2);
       if (fire !== undefined) {
         const tf = fire + hh(i, 4) * 1.9, s = view.mirror ? -1 : 1;
-        once(out, t, tf, 0.18, "muz", 400, 400, (p, u) => fxMuzzle(p, u), x + cam.right.x * s * 0.95, 1.75, z + cam.right.z * s * 0.95, 1.0, 1.0);
-        once(out, t, tf, 2.5, "smk", 400, 400, (p, u) => fxSmoke(p, u), x + cam.right.x * s * 1.1, 2.0, z + cam.right.z * s * 1.1, 2.0, 2.0, true);
+        once(out, t, tf, 0.18, "muz", 400, 400, (p, u) => fxMuzzle(p, u), x2 + cam.right.x * s * 0.95, 1.75, z2 + cam.right.z * s * 0.95, 1.0, 1.0);
+        once(out, t, tf, 2.5, "smk", 400, 400, (p, u) => fxSmoke(p, u), x2 + cam.right.x * s * 1.1, 2.0, z2 + cam.right.z * s * 1.1, 2.0, 2.0, true);
       }
     } else stand(cam, out, who, x, z, { expr: "stern", blink: lidAt(t, who.i) });
   }
@@ -325,7 +327,7 @@ const radio = (cam: CamInfo, t: number, out: Stage) => {
   out.fx.push({ key: "basket", cw: 500, ch: 360, draw: fxBasket, x: -2.0, y: 0.38, z: 0.75, w: 0.75, h: 0.54 });
   if (t >= 15.85 - L2) for (let k = 0; k < 3; k++) {
     const pop = smooth((t - 15.85 - k * 0.12) / 0.25);
-    if (pop > 0) bird(cam, out, { i: 10 + k, view: "front", x: -2.22 + k * 0.22, y: 0.52 - 0.35 * (1 - pop), z: 0.74, expr: k === 1 ? "determined" : "neutral", scale: 0.42, blink: t + k });
+    if (pop > 0) bird(cam, out, { i: 10 + k, view: "front", x: -2.24 + k * 0.24, y: 0.4 - 0.4 * (1 - pop), z: 0.86, expr: k === 1 ? "determined" : "neutral", scale: 0.6, blink: t + k });
   }
 };
 const launch = (t0: number, t: number, x0: number, z0: number) => {
@@ -336,10 +338,10 @@ const first = (cam: CamInfo, t: number, out: Stage) => {
   pocket(cam, t, out, (i) => (t > 17.9 ? "shock" : "nervous"), -1);
   for (const [k, t0, hit] of [[0, 17.05, 17.87], [1, 18.55, 19.32]] as const) {
     if (t < t0) continue;
-    if (t < hit) { const b = launch(t0, t, 0.3, 0.8); bird(cam, out, { i: 20 + k, view: "side", fly: true, flap: b.flap, x: b.x, y: b.y, z: b.z, dx: 1, expr: "determined" }); }
-    else if (t < hit + 0.9) { const b = launch(t0, hit, 0.3, 0.8), fall = (t - hit); bird(cam, out, { i: 20 + k, view: "side", fly: true, flap: 0, x: b.x + 0.8 * fall, y: b.y - 6 * fall * fall, z: b.z, dx: 1, expr: "dazed", roll: 2.5 * fall }); }
+    if (t < hit) { const b = launch(t0, t, 0.3, 0.8); bird(cam, out, { i: 20 + k, view: "side", fly: true, flap: b.flap, x: b.x, y: b.y, z: b.z, dx: 1, expr: "determined", scale: 1.8 }); }
+    else if (t < hit + 0.9) { const b = launch(t0, hit, 0.3, 0.8), fall = (t - hit); bird(cam, out, { i: 20 + k, view: "side", fly: true, flap: 0, x: b.x + 0.8 * fall, y: b.y - 6 * fall * fall, z: b.z, dx: 1, expr: "dazed", roll: 2.5 * fall, scale: 1.8 }); }
     const b = launch(t0, hit, 0.3, 0.8);
-    feathers(out, t, hit, b.x, b.y, b.z);
+    feathers(out, t, hit, b.x, b.y + 0.4, b.z, 2.4);
   }
 };
 const last = (cam: CamInfo, t: number, out: Stage) => {
@@ -352,12 +354,12 @@ const takeoff = (cam: CamInfo, t: number, out: Stage) => {
   if (t < 22.7) {
     stand(cam, out, SIG, -2.0, 1.2, { expr: "grin", prop: t < 21.95 ? "hold" : "fist", blink: lidAt(t, 51) });
     const b = t < 21.95 ? { x: -2.0, y: 0.98, z: 1.0, flap: 0 } : launch(21.95, t, -2.0, 1.0);
-    bird(cam, out, t < 21.95 ? { i: 0, view: "front", x: b.x, y: b.y, z: b.z, expr: "determined", scale: 0.55, blink: t } : { i: 0, view: "side", fly: true, flap: (t * 3.4) % 1, x: b.x, y: b.y, z: b.z, dx: 1, expr: "determined", capsule: true });
+    bird(cam, out, t < 21.95 ? { i: 0, view: "front", x: b.x, y: b.y, z: b.z, expr: "determined", scale: 0.55, blink: t } : { i: 0, view: "side", fly: true, flap: (t * 3.4) % 1, x: b.x, y: b.y, z: b.z, dx: 1, expr: "determined", capsule: true, scale: 1.5 });
     pocket(cam, t, out, () => "grin");
   } else if (t < 24.03) {
     germansRing(cam, t, out, true, 23.9 - 1.0);
   } else {
-    bird(cam, out, { i: 0, view: "side", fly: true, flap: (t * 3.6) % 1, x: flyX(t), y: flyY(t), z: 28, dx: 1, expr: "determined", capsule: true, tilt: 8 * Math.sin(t * 7) });
+    bird(cam, out, { i: 0, view: "side", fly: true, flap: (t * 3.6) % 1, x: flyX(t), y: flyY(t), z: 28, dx: 1, expr: "determined", capsule: true, tilt: 8 * Math.sin(t * 7), scale: 1.5 });
     for (let k = 0; k < 4; k++) once(out, t, 24.1 + k * 0.33, 0.3, "zip", 400, 160, (p, u) => fxZip(p, u), flyX(t) + 0.3 - k * 0.2, flyY(t) + (k % 2 ? 0.55 : -0.5), 27.6, 1.6, 0.64);
   }
 };
@@ -365,7 +367,7 @@ const hit = (cam: CamInfo, t: number, out: Stage) => {
   const eye = t >= 27.0 - L2, leg = t >= 28.14 - L2, hurt = t >= 26.09 - L2 && t < 28.6;
   const x = flyX(t), y = flyY(t) - (hurt ? 0.25 * Math.sin((t - 26) * 9) : 0);
   bird(cam, out, { i: 0, view: "side", fly: true, flap: (t * (t > 28.6 ? 4.4 : 3.4)) % 1, x, y, z: 28, dx: 1, expr: t > 28.6 ? "determined" : hurt ? "pained" : "determined",
-    eye: eye ? "patch" : "ok", leg: leg ? "hang" : "two", capsule: true, tilt: hurt ? 10 * Math.sin((t - 26) * 6) : 0 });
+    eye: eye ? "patch" : "ok", leg: leg ? "hang" : "two", capsule: true, tilt: hurt ? 10 * Math.sin((t - 26) * 6) : 0, scale: 1.5 });
   for (const th of [26.09, 27.0, 28.14]) { feathers(out, t, th, flyX(th) + 0.1, flyY(th), 27.8, 1.4); burst(out, t, th, flyX(th) + 0.2, flyY(th), 27.7, 0.9, 0.2); }
   for (let k = 0; k < 6; k++) once(out, t, 25.6 + k * 0.45, 0.3, "zip", 400, 160, (p, u) => fxZip(p, u), x + 0.4 - (k % 3) * 0.3, y + (k % 2 ? 0.6 : -0.55), 27.6, 1.6, 0.64);
 };
@@ -384,8 +386,8 @@ const land = (cam: CamInfo, t: number, out: Stage) => {
     if (t >= 32.5) out.fx.push({ key: "msg", cw: 400, ch: 260, draw: fxMessage, x: LOFT[0] + 0.15, y: 1.33, z: LOFT[2] - 1.85, w: 0.5, h: 0.33 });
   }
   if (t >= 35.4) {
-    stand(cam, out, { i: 52, o: { ...MAJOR, build: "stout", moustache: "#5a3b2a" }, okey: "col" }, HQ[0] - 10, HQ[2] + 11, { expr: t > 36.8 ? "shock" : "stern", prop: "phone", blink: lidAt(t, 52) });
-    if (t > 36.8) burst(out, t, 36.84 - L2, HQ[0] - 9.6, 2.0, HQ[2] + 10.8, 0.9, 0.35);
+    stand(cam, out, { i: 52, o: { ...MAJOR, build: "stout", moustache: "#5a3b2a" }, okey: "col" }, HQ[0] - 6, HQ[2] + 9, { expr: t > 36.8 ? "shock" : "stern", prop: "phone", blink: lidAt(t, 52) });
+    if (t > 36.8) burst(out, t, 36.84 - L2, HQ[0] - 5.6, 2.0, HQ[2] + 8.8, 0.9, 0.35);
   }
 };
 const explain = (cam: CamInfo, t: number, out: Stage) => {
@@ -397,12 +399,12 @@ const explain = (cam: CamInfo, t: number, out: Stage) => {
   }
   if (t < 41.27) {
     bird(cam, out, { i: 30, view: "side", x: LOFT[0] + 0.4, y: BOARD_Y, z: LOFT[2] - 2.9, dx: -1, expr: "happy", blink: t });
-    once(out, t, 40.5, 0.8, "home", 300, 300, (p, u) => fxHome(p, smooth(u * 2)), LOFT[0], 9.2, LOFT[2], 3.2, 3.2);
-    if (t >= 40.5 + 0.8) out.fx.push({ key: "home1", cw: 300, ch: 300, draw: (p) => fxHome(p, 1), x: LOFT[0], y: 9.2, z: LOFT[2], w: 3.2, h: 3.2 });
+    once(out, t, 40.5, 0.8, "home", 300, 300, (p, u) => fxHome(p, smooth(u * 2)), LOFT[0], 9.6, LOFT[2], 5.5, 5.5);
+    if (t >= 40.5 + 0.8) out.fx.push({ key: "home1", cw: 300, ch: 300, draw: (p) => fxHome(p, 1), x: LOFT[0], y: 9.6, z: LOFT[2], w: 5.5, h: 5.5 });
     return;
   }
   const u = t - 41.27, px = HQ[0] - 70 + 6 * u + 3, pz = -60 + 9 * u + 4, py = 17.5;
-  bird(cam, out, { i: 30, view: "side", fly: true, flap: (t * 3.2) % 1, x: px, y: py - 0.3, z: pz, dx: 6, dz: 9, expr: "determined" });
+  bird(cam, out, { i: 30, view: "side", fly: true, flap: (t * 3.2) % 1, x: px, y: py - 0.6, z: pz, dx: 6, dz: 9, expr: "determined", scale: 2.2 });
   const ahead = (d: number, up: number, side: number) => ({ x: px + 0.55 * d + side * cam.right.x, y: py + up, z: pz + 0.83 * d + side * cam.right.z });
   if (t >= 42.8 - L2) { const s = smooth((t - 42.8) / 0.3), a = ahead(9, 3.5, 2.2); out.fx.push({ key: `sun${q((t * 0.3) % 1, 30)}`, cw: 500, ch: 500, draw: (p) => fxSunPoint(p, q((t * 0.3) % 1, 30)), ...a, w: 3.4 * s, h: 3.4 * s }); }
   if (t >= 43.6 - L2 && t < 45.5) { const a = ahead(6, 0.5, -0.8); out.fx.push({ key: `field${q((t * 0.5) % 1, 30)}`, cw: 800, ch: 800, draw: (p) => fxField(p, q((t * 0.5) % 1, 30)), ...a, w: 5.5, h: 5.5, soft: true }); }
@@ -427,8 +429,8 @@ const medal = (cam: CamInfo, t: number, out: Stage) => {
   for (let i = 0; i < 4; i++) stand(cam, out, dbW(i, false), TABLE[0] - 2.2 + i * 1.3, TABLE[2] + 3.0, { expr: got ? "grin" : "smile", prop: got && i % 2 ? "fist" : null, blink: lidAt(t, i) });
 };
 const caseBird = (cam: CamInfo, t: number, out: Stage, bow: boolean, expr: PigeonExpr) =>
-  bird(cam, out, { i: 0, view: "front", x: MUSEUM[0], y: CASE_Y, z: MUSEUM[2], expr, eye: "patch", leg: "peg", medal: true, bow, grey: true, scale: 0.75, blink: 0 });
-const VIS: [number, number][] = [[-1.7, -1.3], [1.6, -1.1], [-2.5, 0.6], [2.4, 0.9]];
+  bird(cam, out, { i: 0, view: "front", x: MUSEUM[0], y: CASE_Y, z: MUSEUM[2], expr, eye: "patch", leg: "peg", medal: true, bow, grey: true, scale: 1.0, blink: 0 });
+const VIS: [number, number][] = [[-1.2, -1.4], [1.2, -1.3], [-1.7, 0.4], [1.8, 0.6]];
 const she = (cam: CamInfo, t: number, out: Stage) => {
   caseBird(cam, t, out, true, "neutral");
   VIS.forEach(([dx, dz], i) => {
@@ -441,7 +443,7 @@ const dna = (cam: CamInfo, t: number, out: Stage) => {
   stand(cam, out, { i: 90, o: SCIENTIST, okey: "sci" }, LAB[0] + 0.1, LAB[2] + 0.75, { expr: t > 57.75 ? "shock" : "neutral", look: -1, blink: lidAt(t, 90) });
   const u = q((t * 0.5) % 1, 40);
   out.fx.push({ key: `helix${u}`, cw: 300, ch: 600, draw: (p) => fxHelix(p, u), x: LAB[0] - 0.75, y: 1.75, z: LAB[2] + 0.4, w: 0.5, h: 1.0 });
-  if (t > 57.75) { const s = Math.min(1, (t - 57.75) / 0.2); out.fx.push({ key: `bulb${q(s, 20)}`, cw: 300, ch: 400, draw: (p) => fxBulb(p, q(s, 20)), x: LAB[0] + 0.15, y: 2.45, z: LAB[2] + 0.7, w: 0.5, h: 0.66 }); }
+  if (t > 57.75) { const s = Math.min(1, (t - 57.75) / 0.2); out.fx.push({ key: `bulb${q(s, 20)}`, cw: 300, ch: 400, draw: (p) => fxBulb(p, q(s, 20)), x: LAB[0] + 0.15, y: 2.25, z: LAB[2] + 0.7, w: 0.45, h: 0.6 }); }
 };
 const boy = (cam: CamInfo, t: number, out: Stage) => {
   const off = t >= 59.22 - L2;

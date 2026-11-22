@@ -30,7 +30,7 @@ export type Light = "day" | "golden" | "night";
 export type Crowd = "hook" | "forest" | "shell" | "radio" | "first" | "last" | "takeoff" | "hit" | "land" | "explain" | "leg" | "medal" | "she" | "dna" | "boy";
 export type ShotDef = { id: number; a: number; b: number; light: Light; crowd: Crowd; sunAz?: number; sunEl?: number };
 const C: [Crowd, Light][] = [["hook", "day"], ["forest", "day"], ["shell", "day"], ["radio", "day"], ["first", "day"], ["last", "day"], ["takeoff", "day"],
-  ["hit", "day"], ["land", "day"], ["explain", "day"], ["leg", "golden"], ["medal", "day"], ["she", "day"], ["dna", "day"], ["boy", "day"]];
+  ["hit", "day"], ["land", "day"], ["explain", "day"], ["leg", "day"], ["medal", "day"], ["she", "day"], ["dna", "day"], ["boy", "day"]];
 const CUTS = [0, 121, 290, 385, 514, 600, 651, 766, 892, 1127, 1435, 1528, 1580, 1670, 1754, TOTAL];
 export const SHOTS: ShotDef[] = C.map(([crowd, light], i) => ({ id: i + 1, a: CUTS[i], b: CUTS[i + 1], light, crowd }));
 for (const i of [10]) { SHOTS[i].sunAz = 125; SHOTS[i].sunEl = 14; }
@@ -79,8 +79,8 @@ const at = (b: V3, dx: number, dy: number, dz: number): V3 => [b[0] + dx, b[1] +
 
 const CAMS: Record<number, Key[]> = {
   1: [
-    { f: 0, s: (f) => dolly(at(TABLE, 0.9, 1.45, -1.9), at(TABLE, 0, 1.3, 0), pushK(f, 0, 0.003), { fov: 38, roll: 0.03 }) },
-    { f: 66, dur: 22, s: (f) => dolly(at(TABLE, 0.5, 1.3, -1.35), at(TABLE, 0.05, 1.45, 0), pushK(f, 66, 0.003, 0.007, 30), { fov: 36, roll: -0.03 }) },
+    { f: 0, s: (f) => dolly(at(TABLE, 1.2, 1.7, -3.0), at(TABLE, 0, 1.4, 0), pushK(f, 0, 0.003), { fov: 38, roll: 0.03 }) },
+    { f: 66, dur: 22, s: (f) => dolly(at(TABLE, 0.8, 1.55, -2.2), at(TABLE, 0.05, 1.5, 0), pushK(f, 66, 0.003, 0.007, 30), { fov: 36, roll: -0.03 }) },
   ],
   2: [
     { f: 117, s: (f) => zoom([30, 34, -58], [0, 0, 0], 44, pushK(f, 117, 0.002)) },
@@ -116,24 +116,24 @@ const CAMS: Record<number, Key[]> = {
     { f: 928, dur: 20, s: (f) => zoom(at(LOFT, -7, 2.0, -22), at(LOFT, 0, 4.2, -0.6), 26, pushK(f, 928, 0.002)) },
     { f: 962, cut: true, s: (f) => dolly(at(LOFT, 1.4, 1.75, -4.8), at(LOFT, 0.2, 1.45, -1.6), pushK(f, 962, 0.003), { fov: 42 }) },
     { f: 1003, cut: true, s: (f) => dolly(at(LOFT, 0.35, 1.45, -3.3), at(LOFT, 0.15, 1.35, -1.75), pushK(f, 1003, 0.0018), { fov: 40 }) },
-    { f: 1068, cut: true, s: (f) => dolly(at(HQ, -8.6, 1.7, 7.8), at(HQ, -10, 1.45, 11), pushK(f, 1068, 0.003, 0.008, 35), { fov: 40, roll: 0.04 }) },
+    { f: 1068, cut: true, s: (f) => dolly(at(HQ, -4.8, 1.75, 6.0), at(HQ, -6, 1.4, 9), pushK(f, 1068, 0.003, 0.008, 35), { fov: 42, roll: 0.04 }) },
   ],
   10: [
     { f: 1123, s: (f) => dolly(at(LOFT, 2.6, 5.3, -6.5), at(LOFT, 0, 5.2, -1), pushK(f, 1123, 0.0025), { fov: 42 }) },
     { f: 1198, cut: true, s: (f) => zoom(at(LOFT, -10, 3, -26), at(LOFT, 0, 4.5, 0), 40, pushK(f, 1198, 0.002)) },
-    { f: 1238, cut: true, s: (f) => { const u = (T(f) - 41.27); return { pos: [HQ[0] - 70 + 6 * u, 16, -60 + 9 * u - 6], look: [HQ[0] - 70 + 6 * u + 3, 17.5, -60 + 9 * u + 4], fov: 54, roll: -0.03 }; } },
-    { f: 1368, dur: 20, s: (f) => { const u = (T(f) - 41.27); return { pos: [HQ[0] - 70 + 6 * u - 1.5, 16.6, -60 + 9 * u - 4], look: [HQ[0] - 70 + 6 * u + 1.5, 17.6, -60 + 9 * u + 4], fov: 50, roll: 0.03 }; } },
+    { f: 1238, cut: true, s: (f) => { const u = (T(f) - 41.27); return { pos: [HQ[0] - 70 + 6 * u + 0.6, 16.9, -60 + 9 * u - 2.2], look: [HQ[0] - 70 + 6 * u + 3, 17.9, -60 + 9 * u + 4], fov: 56, roll: -0.03 }; } },
+    { f: 1368, dur: 20, s: (f) => { const u = (T(f) - 41.27); return { pos: [HQ[0] - 70 + 6 * u - 0.6, 17.0, -60 + 9 * u - 1.6], look: [HQ[0] - 70 + 6 * u + 2.5, 17.9, -60 + 9 * u + 4], fov: 54, roll: 0.03 }; } },
   ],
   11: [
     { f: 1431, s: (f) => dolly([-2, 1.7, -14], [0, 1.2, -6], pushK(f, 1431, 0.002), { fov: 46 }) },
-    { f: 1477, cut: true, s: (f) => dolly(at(HQ, 9.6, 1.25, -12.2), at(HQ, 8.2, 0.75, -9.4), pushK(f, 1477, 0.003, 0.007, 30), { fov: 40 }) },
+    { f: 1477, cut: true, s: (f) => dolly(at(HQ, 8.6, 1.3, -12.2), at(HQ, 8.4, 0.6, -9.15), pushK(f, 1477, 0.003, 0.007, 30), { fov: 44 }) },
   ],
   12: [
     { f: 1524, s: (f) => dolly(at(TABLE, 1.6, 1.7, -3.6), at(TABLE, 0.3, 1.35, 0.2), pushK(f, 1524, 0.003, 0.007, 30), { fov: 42 }) },
   ],
   13: [
-    { f: 1576, s: (f) => zoom(at(MUSEUM, 3.5, 1.9, -6.5), at(MUSEUM, 0, 1.4, 0), 44, pushK(f, 1576, 0.002)) },
-    { f: 1630, dur: 24, s: (f) => zoom(at(MUSEUM, 3.5, 1.9, -6.5), at(MUSEUM, 0, 1.55, 0), 30, pushK(f, 1630, 0.002), { roll: 0.03 }) },
+    { f: 1576, s: (f) => zoom(at(MUSEUM, 0.8, 1.9, -5.2), at(MUSEUM, 0, 1.55, 0.2), 52, pushK(f, 1576, 0.002)) },
+    { f: 1630, dur: 24, s: (f) => zoom(at(MUSEUM, 0.8, 1.9, -5.2), at(MUSEUM, 0, 1.65, 0), 40, pushK(f, 1630, 0.002), { roll: 0.03 }) },
   ],
   14: [
     { f: 1666, s: (f) => dolly(at(LAB, 1.6, 1.75, -3.2), at(LAB, 0, 1.45, 0.4), pushK(f, 1666, 0.003), { fov: 42 }) },
@@ -141,7 +141,7 @@ const CAMS: Record<number, Key[]> = {
   ],
   15: [
     { f: 1754, s: (f) => dolly(at(MUSEUM, 0.3, 1.6, -2.3), at(MUSEUM, 0, 1.5, 0), pushK(f, 1754, 0.0025, 0.006, 30), { fov: 38 }) },
-    { f: 1788, cut: true, s: (f) => zoom(at(MUSEUM, 2.8, 1.8, -5.8), at(MUSEUM, 0, 1.45, 0), 44, pushK(f, 1788, 0.0018)) },
+    { f: 1788, cut: true, s: (f) => zoom(at(MUSEUM, 0.6, 1.85, -4.6), at(MUSEUM, 0, 1.6, 0.2), 52, pushK(f, 1788, 0.0018)) },
   ],
 };
 
