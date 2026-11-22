@@ -30,7 +30,8 @@ console.log(`worker ${PARITY}: ${todo.length} of ${want.length} frames to render
 const runs = [];
 for (const f of todo) {
   const r = runs[runs.length - 1];
-  if (r && r.length < 40 && (r.length === 1 ? f - r[0] <= 4 : f - r[r.length - 1] === r[1] - r[0])) r.push(f); else runs.push([f]);
+  // everyNthFrame steps from frame 0, so a spaced run must start on a multiple of its spacing
+  if (r && r.length < 40 && (r.length === 1 ? f - r[0] === 1 || (f - r[0] === 2 && r[0] % 2 === 0) : f - r[r.length - 1] === r[1] - r[0])) r.push(f); else runs.push([f]);
 }
 for (const run of runs) {
   const step = run.length > 1 ? run[1] - run[0] : 1;
