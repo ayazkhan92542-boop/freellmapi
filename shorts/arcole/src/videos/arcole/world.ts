@@ -145,7 +145,7 @@ export class World {
 
     setSight(sightLines());
     const b = new Batch();
-    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#a9a272" }));
+    const marsh = lam("marshHD", () => ({ map: grassHD(), color: "#9a9868" }));
     const grass = lam("grassPlateau", () => ({ map: grassHD(), color: "#aeb87e" }));
     const dirt = lam("dirtHD", () => ({ map: dirtTex() }));
     const earth = lam("earth", () => ({ map: bed(), color: "#a88a66" }));

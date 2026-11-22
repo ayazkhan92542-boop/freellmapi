@@ -133,7 +133,7 @@ const CAMS: Record<number, Key[]> = {
   5: [
     { f: 663, s: (f) => dolly([6.5, DK + 1.55, 10.0], [0, DK + 1.35, 12.6], pushK(f, 663, 0.0025), { fov: 44 }) }, // volley
     { f: 707, cut: true, s: (f) => dolly([1.2, DK + 1.7, -19.4], [-0.1, DK + 1.15, -24], pushK(f, 707, 0.0025), { fov: 44 }) }, // the aide
-    { f: 763, cut: true, s: (f) => zoom([11.5, DK + 2.3, -35.5], [4.2, 1.2, -27.6], 50, pushK(f, 763, 0.0018)) }, // swept off the dike
+    { f: 763, cut: true, s: (f) => zoom([16.5, DK + 4.6, -37], [5.0, 0.7, -27.6], 50, pushK(f, 763, 0.0018)) }, // swept off the dike
   ],
   6: [
     { f: 830, s: (f) => dolly([8.2, 0.62, -25.1], [8.6, 0.3, -27.6], pushK(f, 830, 0.0022, 0.006, 30), { fov: 40 }) }, // up to his neck
@@ -142,7 +142,7 @@ const CAMS: Record<number, Key[]> = {
   7: [{ f: 976, s: (f) => dolly([0.8, DK + 1.75, -40.2], [0, DK + 1.45, -45], pushK(f, 976, 0.003, 0.007, 30), { fov: 40 }) }],
   8: [
     { f: 1033, s: (f) => { const x = rideX(T(f)) - 6; return { pos: [x, 1.9, RIDE_Z - 9.5], look: [x + 0.8, 1.3, RIDE_Z], fov: 46 }; } },
-    { f: 1123, cut: true, s: (f) => dolly([31, DK + 2.4, 12.5], [14, DK + 1.3, 17], pushK(f, 1123, 0.002), { fov: 46 }) }, // riders behind the Austrian flank
+    { f: 1123, cut: true, s: (f) => dolly([36, DK + 2.6, 10.5], [8, DK + 1.0, 14], pushK(f, 1123, 0.002), { fov: 46 }) }, // riders behind the Austrian flank
   ],
   9: [
     { f: 1176, s: (f) => dolly([36, DK + 2.3, BLOW_Z - 4.5], [24, DK + 1.9, BLOW_Z + 0.5], pushK(f, 1176, 0.0025, 0.007, 35), { fov: 44, roll: -0.04 }) },

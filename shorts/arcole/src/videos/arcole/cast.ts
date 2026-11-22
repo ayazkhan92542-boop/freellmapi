@@ -406,7 +406,7 @@ const think = (cam: CamInfo, t: number, out: Stage) => {
 const ride = (cam: CamInfo, t: number, out: Stage) => {
   if (t < 37.4) reedRiders(cam, t, out, rideX(t), RIDE_Z, 1, RIDERS, false);
   else {
-    for (let i = 0; i < RIDERS; i++) horse(cam, out, i, 27 - 2.4 * (t - 37.4) + (i % 4) * 2.7 + Math.floor(i / 4) * 1.2, 19 + Math.floor(i / 4) * 2.3, -1, 0, t, { rate: 1.8, expr: "grin" });
+    for (let i = 0; i < RIDERS; i++) horse(cam, out, i, 21 - 2.4 * (t - 37.4) + (i % 4) * 2.7 + Math.floor(i / 4) * 1.2, 14.6 + Math.floor(i / 4) * 2.2, -1, 0, t, { rate: 1.8, expr: "grin" });
     austrianLine(cam, t, out, { expr: "dazed" });
   }
 };
