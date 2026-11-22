@@ -79,7 +79,7 @@ const at = (b: V3, dx: number, dy: number, dz: number): V3 => [b[0] + dx, b[1] +
 
 const CAMS: Record<number, Key[]> = {
   1: [
-    { f: 0, s: (f) => dolly(at(TABLE, 1.2, 1.7, -3.0), at(TABLE, 0, 1.4, 0), pushK(f, 0, 0.003), { fov: 38, roll: 0.03 }) },
+    { f: 0, s: (f) => dolly(at(TABLE, 0.7, 1.7, -3.0), at(TABLE, -0.1, 1.4, 0), pushK(f, 0, 0.003), { fov: 38, roll: 0.03 }) },
     { f: 66, dur: 22, s: (f) => dolly(at(TABLE, 0.8, 1.55, -2.2), at(TABLE, 0.05, 1.5, 0), pushK(f, 66, 0.003, 0.007, 30), { fov: 36, roll: -0.03 }) },
   ],
   2: [
@@ -94,7 +94,7 @@ const CAMS: Record<number, Key[]> = {
   4: [
     { f: 385, s: (f) => dolly([0.6, 1.7, -2.6], [0, 1.25, 1.5], pushK(f, 385, 0.003, 0.007, 30), { fov: 40 }) },
     { f: 433, cut: true, s: (f) => dolly([-2.4, 1.55, -1.6], [-2.0, 0.85, 1.2], pushK(f, 433, 0.003), { fov: 42 }) },
-    { f: 470, dur: 20, s: (f) => dolly([-2.15, 1.25, 0.0], [-2.0, 0.75, 1.2], pushK(f, 470, 0.003), { fov: 38, roll: 0.03 }) },
+    { f: 470, dur: 20, s: (f) => dolly([-2.1, 1.35, -0.9], [-2.05, 0.65, 0.9], pushK(f, 470, 0.003), { fov: 40, roll: 0.03 }) },
   ],
   5: [
     { f: 514, s: (f) => dolly([1.5, 1.0, -6.5], [0.5, 4.0, 1], pushK(f, 514, 0.0015), { fov: 52 }) },
@@ -125,7 +125,7 @@ const CAMS: Record<number, Key[]> = {
     { f: 1368, dur: 20, s: (f) => { const u = (T(f) - 41.27); return { pos: [HQ[0] - 70 + 6 * u - 0.6, 17.0, -60 + 9 * u - 1.6], look: [HQ[0] - 70 + 6 * u + 2.5, 17.9, -60 + 9 * u + 4], fov: 54, roll: 0.03 }; } },
   ],
   11: [
-    { f: 1431, s: (f) => dolly([-2, 1.7, -14], [0, 1.2, -6], pushK(f, 1431, 0.002), { fov: 46 }) },
+    { f: 1431, s: (f) => dolly([-1.0, 1.6, -6.5], [0, 1.15, 0], pushK(f, 1431, 0.002), { fov: 46 }) },
     { f: 1477, cut: true, s: (f) => dolly(at(HQ, 8.6, 1.3, -12.2), at(HQ, 8.4, 0.6, -9.15), pushK(f, 1477, 0.003, 0.007, 30), { fov: 44 }) },
   ],
   12: [

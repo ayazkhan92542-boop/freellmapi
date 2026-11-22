@@ -173,10 +173,10 @@ export class World {
     }
     for (let i = 0; i < 260; i++) {
       const a = rand(i * 1.7) * Math.PI * 2, r = 10 + rand(i * 3.1) * 120, x = Math.cos(a) * r, z = Math.sin(a) * r;
-      if (nearLens(x, z, 5)) continue;
+      if (nearLens(x, z, 7)) continue;
       prop(b, {} as Kit, rand(i * 5.3) < 0.55 ? "tree_oak" : rand(i * 7.1) < 0.5 ? "tree" : "tree_fat", x, 0, z, 9 + rand(i * 2.3) * 7);
     }
-    for (let i = 0; i < 70; i++) { const a = rand(i * 9.1) * Math.PI * 2, r = 8 + rand(i * 4.7) * 14; if (nearLens(Math.cos(a) * r, Math.sin(a) * r, 4.5)) continue; prop(b, {} as Kit, "plant_bush", Math.cos(a) * r, 0, Math.sin(a) * r, 1.2 + rand(i) * 0.6); }
+    for (let i = 0; i < 70; i++) { const a = rand(i * 9.1) * Math.PI * 2, r = 8 + rand(i * 4.7) * 14; if (nearLens(Math.cos(a) * r, Math.sin(a) * r, 7)) continue; prop(b, {} as Kit, "plant_bush", Math.cos(a) * r, 0, Math.sin(a) * r, 1.2 + rand(i) * 0.6); }
     // ---- HQ field (x = 300): pigeon loft with a landing board, tents, flag poles, ceremony table ----
     b.add(quadAt(150, 450, -150, 150, 0, 40, 40), grass);
     b.add(quadAt(HQ[0] - 2, HQ[0] + 2, -40, 40, 0.01, 1, 20), dirt);
