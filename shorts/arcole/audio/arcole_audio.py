@@ -149,6 +149,9 @@ def build_sfx(words):
     put(S, G.whoa(r, 190), 26.45, -10, 0.3, "napoleon whoa")
     put(S, G.splash_big(r), 26.98, -6, 0.4, "mud splash")
     put(S, squelch(r, 1.2), 27.3, -10, 0.3, "squelch")
+    put(S, G.bubbles(0.25, r, 30, 300, 900, (0.01, 0.03)), 27.38, -9, 0.3, "hat lands")
+    put(S, I.glock(I.m2f(84), 0.4, r), 27.4, -16, 0.3)
+    put(S, G.whoosh(0.5, r, peak=0.3, f_lo=600, f_hi=3000), 26.5, -16, 0.3, "hat flies")
     # 6 mud
     for t in [28.2, 29.4, 30.3]:
         put(S, G.bubbles(0.5, r, 10, 150, 600, (0.02, 0.05)), t, -14, 0.1, "mud bubble")

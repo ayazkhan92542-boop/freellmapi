@@ -22,9 +22,11 @@
   25.18s  f  756  whoosh
   25.45s  f  764  stab
   26.45s  f  794  napoleon whoa
+  26.50s  f  795  hat flies
   26.98s  f  809  mud splash
   27.05s  f  812  tuba deflate
   27.30s  f  819  squelch
+  27.38s  f  821  hat lands
   28.20s  f  846  mud bubble
   29.40s  f  882  mud bubble
   30.30s  f  909  mud bubble

@@ -4,7 +4,7 @@
 import * as THREE from "three";
 import { Batch, boxGeo, V, lam, house, Kit, Ray, setSight, blocks, prop } from "./build";
 import { ctex, grassHD, cobbleHD, planksHD, beamHD, stoneHD, waterNear, waterFar, cloudHD, beam, bed } from "./paint";
-import { Pen, reedClump, fxPainting } from "./toon";
+import { Pen, reedClump, fxPainting, flowerTuft } from "./toon";
 import { LIGHTS, LOOK, LightPreset } from "./lights";
 import { TONE, CHAR, LFB, untone } from "./shade";
 import { NOINK } from "./ink";
@@ -131,6 +131,14 @@ export class World {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: this.cloudMaps.day[i % 4], color: new THREE.Color(1.1, 1.1, 1.1), transparent: true, depthWrite: false, fog: false }));
       const w = 130 + (i % 4) * 30;
       m.position.set(Math.cos(a) * d, 120 + (i % 4) * 38, Math.sin(a) * d); m.scale.set(w, w / 2, 1);
+      m.layers.set(NOINK);
+      this.clouds.push(m); R.add(m);
+    }
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2 + 0.9, d = 520 + (i % 3) * 50;
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: this.cloudMaps.day[(i + 1) % 4], color: new THREE.Color(1.08, 1.08, 1.08), transparent: true, depthWrite: false, fog: false }));
+      const w = 110 + (i % 3) * 40;
+      m.position.set(Math.cos(a) * d, 38 + (i % 4) * 16, Math.sin(a) * d); m.scale.set(w, w / 2.2, 1);
       m.layers.set(NOINK);
       this.clouds.push(m); R.add(m);
     }
@@ -274,8 +282,24 @@ export class World {
     field(MUD.x0 - 1, MUD.x1 + 1, MUD.z0 - 3, MUD.z0 - 0.6, 0, 14, 1.6, 2.3);
     field(MUD.x1 + 0.6, MUD.x1 + 3, MUD.z0, MUD.z1, 0, 12, 1.6, 2.3);
     field(-32, -18, -24, -10, 0, 90, 1.9, 2.8); // dense around the reed POV
+    const tuftMats = [0, 1, 2].map((k) => lam("tuftM" + k, () => ({ map: ctex("tuft" + k, 256, 256, (g) => flowerTuft(new Pen(g), k * 7 + 3)), alphaTest: 0.5, side: THREE.DoubleSide })));
+    const tuft = (x: number, y: number, z: number, h: number, k: number) => {
+      if (blocks(x - 0.3, x + 0.3, y, y + h, z - 0.3, z + 0.3, true)) return;
+      const a = rand(x * 5.3 + z * 1.7) * Math.PI;
+      for (const r of [a, a + Math.PI / 2]) {
+        const g = new THREE.PlaneGeometry(h, h); g.translate(0, h / 2, 0); g.rotateY(r); g.translate(x, y - 0.02, z);
+        const nn = g.attributes.normal as THREE.BufferAttribute; for (let q = 0; q < nn.count; q++) nn.setXYZ(q, 0, 1, 0);
+        rb.add(g, tuftMats[k % 3]);
+      }
+    };
+    for (let z = -130; z < -8.5; z += 1.1) for (const s of [-1, 1]) {
+      const k = Math.floor(rand(z * 3 + s) * 1000);
+      tuft(s * (2.05 + rand(z + s * 7) * 0.5), DK, z + rand(z * 1.3) * 0.6, 0.45 + rand(z * 2.1 + s) * 0.3, k);
+      if (rand(z * 9 + s) < 0.5) tuft(s * (3.2 + rand(z * 4) * 1.6), DK * (1 - (1.2 + rand(z * 4) * 1.6) / 3.5), z, 0.5, k + 1);
+    }
+    for (let z = 9; z < 70; z += 1.3) for (const s of [-1, 1]) tuft(s * (2.4 + rand(z * 2 + s) * 0.6), DK, z, 0.4 + rand(z + s) * 0.3, Math.floor(rand(z * 5 + s) * 1000));
     rb.build(R, false);
-    R.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh && reedMats.includes(m.material as THREE.MeshLambertMaterial)) m.layers.set(NOINK); });
+    R.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh && (reedMats.includes(m.material as THREE.MeshLambertMaterial) || tuftMats.includes(m.material as THREE.MeshLambertMaterial))) m.layers.set(NOINK); });
 
     // ---- river water ----
     const wNear = waterNear(), wFar = waterFar();
@@ -402,7 +426,8 @@ export class World {
       a.mesh.visible = true;
       a.mesh.position.set(p.x, p.y, p.z);
       a.mesh.rotation.set(0, p.yaw ?? Math.atan2(cam.position.x - p.x, cam.position.z - p.z), p.roll ?? 0);
-      a.mesh.scale.set(p.mirror ? -sc2 : sc2, sc2, sc2);
+      const [qx, qy] = p.sq ?? [1, 1];
+      a.mesh.scale.set((p.mirror ? -sc2 : sc2) * qx, sc2 * qy, sc2);
       a.mesh.castShadow = L.actorShadow;
       used.push(a);
     }

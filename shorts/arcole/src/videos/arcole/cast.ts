@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {
   Pen, bodyFront, bodySide, fxNote, fxBurst, fxSplash, fxStars, fxRing, fxShadow, fxContact, fxPuff,
   Outfit, Expr, FrontOpts, SideOpts, french, NAPOLEON, MUDDY, AIDE, OFFICER_FR, austrian, guide, PAINTER, WALKER, horseRider,
-  fxMuzzle, fxSmoke, fxBlast, fxTap, fxBulb, fxCrowdShadow, HORSE_GROUND,
+  fxMuzzle, fxSmoke, fxBlast, fxTap, fxBulb, fxCrowdShadow, HORSE_GROUND, fxBicorne,
 } from "./toon";
 import {
   FPS, DK, FILES, SHOTS, V3, smooth, clamp01, lin, napZ, colFront, FALL0, FALL1, NAP_FALL, SINK, napRise, rideX, RIDERS, RIDE_Z, BLOW_Z,
@@ -111,7 +111,7 @@ export class Fx {
 // ---------------- placements ----------------
 export type Place = {
   key: string; draw: (p: Pen) => void; x: number; y: number; z: number;
-  scale?: number; mirror?: boolean; yaw?: number; geo?: "body" | "swing" | "horse"; roll?: number; size?: [number, number, number];
+  scale?: number; mirror?: boolean; yaw?: number; geo?: "body" | "swing" | "horse"; sq?: [number, number]; roll?: number; size?: [number, number, number];
 };
 export type FxPlace = { key: string; cw: number; ch: number; draw: (p: Pen) => void; x: number; y: number; z: number; w: number; h: number; flat?: boolean; rot?: number; soft?: boolean };
 /** sun = world direction TOWARD the sun (optional: when absent the scene's shadow-casting light is used) */
@@ -222,6 +222,8 @@ const FR = [0, 1, 2, 3].map((v) => french(v));
 const AU = [0, 1, 2, 3].map((v) => austrian(v));
 const GU = [0, 1, 2, 3].map((v) => guide(v));
 const NAP = (muddy = false): Who => ({ i: 900, o: muddy ? MUDDY : NAPOLEON, okey: muddy ? "napm" : "nap" });
+const NAPHAT: Outfit = { ...NAPOLEON, hat: null, hair: "#3a2a1e" };
+const MUDNH: Outfit = { ...MUDDY, hat: null, hair: "#3a2a1e" };
 const frW = (i: number): Who => ({ i, o: FR[i % 4], okey: `fr${i % 4}` });
 const auW = (i: number): Who => ({ i: i + 300, o: AU[i % 4], okey: `au${i % 4}` });
 const FRONT = { side: false, mirror: false };
@@ -234,7 +236,8 @@ const stand = (cam: CamInfo, out: Stage, who: Who, x: number, z: number, fo: Fro
 const mover = (cam: CamInfo, out: Stage, who: Who, x: number, z: number, dx: number, dz: number, t: number, o: { rate?: number; expr?: Expr; run?: boolean; fo?: FrontOpts; so?: SideOpts; y?: number }) => {
   const y = o.y ?? groundY(x, z), ph = q(((t * (o.rate ?? 1.6) + hh(who.i, 5)) % 1), 60), expr = o.expr ?? "stern";
   const view = viewOf(cam, x, z, dx, dz), blink = lidAt(t, who.i);
-  const fo: FrontOpts = { mode: "march", phase: ph, expr, blink, lift: o.run ? 80 : 60, ...o.fo };
+  const tl = Math.hypot(cam.pos.x - x, cam.pos.z - z) || 1, away = ((cam.pos.x - x) * dx + (cam.pos.z - z) * dz) / (tl * (Math.hypot(dx, dz) || 1)) < -0.57;
+  const fo: FrontOpts = { mode: "march", phase: ph, expr, blink, lift: o.run ? 80 : 60, back: away, ...o.fo };
   const so: SideOpts = { mode: "march", phase: ph, expr, blink, stomp: o.run ? 1.3 : 1, stride: view.fs * (o.run ? 1.25 : 1), run: o.run, ...o.so };
   out.places.push(person(cam, who, x, y, z, view, fo, so));
   blob(out, x, y, z);
@@ -246,10 +249,10 @@ const burst = (out: Stage, t: number, t0: number, x: number, y: number, z: numbe
 };
 const muzzle = (out: Stage, t: number, t0: number, x: number, y: number, z: number, i: number) => {
   const tf = t0 + hh(i, 21) * 0.12;
-  if (t >= tf && t < tf + 0.2) { const u = q((t - tf) / 0.2, 30); out.fx.push({ key: `muz${u}`, cw: 400, ch: 400, draw: (p) => fxMuzzle(p, u), x, y, z, w: 0.9, h: 0.9 }); }
+  if (t >= tf && t < tf + 0.2) { const u = q((t - tf) / 0.2, 30); out.fx.push({ key: `muz${u}`, cw: 400, ch: 400, draw: (p) => fxMuzzle(p, u), x, y, z, w: 1.3, h: 1.3 }); }
   if (t >= tf && t < tf + 3.2) {
     const u = q((t - tf) / 3.2, 40);
-    out.fx.push({ key: `smk${u}`, cw: 400, ch: 400, draw: (p) => fxSmoke(p, u), x: x + 0.3 * u, y: y + 0.5 * u, z: z - 0.6 - 0.8 * u, w: 1.6 + 2.4 * u, h: 1.6 + 2.4 * u, soft: true });
+    out.fx.push({ key: `smk${u}`, cw: 400, ch: 400, draw: (p) => fxSmoke(p, u), x: x + 0.3 * u, y: y + 0.6 * u, z: z - 0.7 - 1.0 * u, w: 2.4 + 3.6 * u, h: 2.4 + 3.6 * u, soft: true });
   }
 };
 /** a horse + rider card: (x, z) hooves, facing (dx, dz) along the ground; trumpet raised or not */
@@ -294,7 +297,8 @@ const austrianLine = (cam: CamInfo, t: number, out: Stage, o: { aim?: number; vo
     const aiming = o.aim !== undefined && t >= o.aim;
     const view = viewOf(cam, x, z, 0, -1);
     const so: SideOpts = { mode: "stand", expr: o.expr ?? "stern", blink: lidAt(t, who.i), aim: aiming };
-    out.places.push(person(cam, who, x, DK, z, aiming ? { side: true, mirror: view.mirror } : FRONT, { mode: "stand", expr: o.expr ?? "stern", blink: lidAt(t, who.i) }, so));
+    const behind = cam.pos.z > z + 1 && !view.side;
+    out.places.push(person(cam, who, x, DK, z, aiming ? { side: true, mirror: view.mirror } : FRONT, { mode: "stand", expr: o.expr ?? "stern", blink: lidAt(t, who.i), back: behind }, so));
     blob(out, x, DK, z);
     if (aiming && o.volley !== undefined) muzzle(out, t, o.volley, x, DK + 1.12, z - 0.95, i);
   }
@@ -314,7 +318,7 @@ const reedRiders = (cam: CamInfo, t: number, out: Stage, x0: number, z: number, 
 
 // ---------------- per shot ----------------
 const hook = (cam: CamInfo, t: number, out: Stage) => {
-  stand(cam, out, NAP(), 0, -40, { expr: t < 0.9 ? "smile" : "smile_closed", blink: lidAt(t, 900) });
+  stand(cam, out, NAP(), 0, -40, { expr: t < 0.9 ? "smile" : "smile_closed", blink: lidAt(t, 900), prop: t >= 0.68 ? "fist" : null });
   column(cam, t, out, -42.6, 3, 1, { standing: true, expr: (i) => (i % 2 ? "grin" : "smile") });
   for (let i = 0; i < 4; i++) horse(cam, out, i, 31.5 - i * 3.2, BLOW_Z + (i % 2) * 0.8, 1, 0, t, { trumpet: t >= 1.72 - L2, expr: "grin" });
 };
@@ -349,7 +353,7 @@ const fire = (cam: CamInfo, t: number, out: Stage) => {
     const u = clamp01((t - 24.2) / 0.55);
     stand(cam, out, NAP(), 0.6, -24, { expr: t < 24.3 ? "stern" : "shock", prop: ["flag", q((t * 0.9) % 1, 30)], blink: lidAt(t, 900) });
     if (u <= 0) stand(cam, out, { i: 901, o: AIDE, okey: "aide" }, -0.7, -24.3, { expr: "stern", blink: lidAt(t, 901) });
-    else out.places.push(person(cam, { i: 901, o: AIDE, okey: "aide" }, -0.7 - 1.6 * u, DK - 1.6 * u * u, -24.6, FRONT, { mode: "fall", expr: "shock", tilt: -70 * u }, {}));
+    else out.places.push({ ...person(cam, { i: 901, o: AIDE, okey: "aide" }, -0.7 - 1.6 * u, DK - 1.6 * u * u, -24.6, FRONT, { mode: "fall", expr: "shock", tilt: -70 * u }, {}), sq: [1 - 0.1 * Math.sin(Math.PI * u), 1 + 0.15 * Math.sin(Math.PI * u)] });
     burst(out, t, 24.2, -0.6, DK + 1.5, -24.2, 0.8, 0.15);
     column(cam, t, out, -26.8, 3, 1, { standing: true, expr: (i) => (t > 24.3 ? "shock" : "stern") });
     for (let k = 0; k < 3; k++) { const u2 = q(((t - 23 + k * 0.7) % 2.1) / 2.1, 30); out.fx.push({ key: `smk${u2}`, cw: 400, ch: 400, draw: (p) => fxSmoke(p, u2), x: 3 - k * 2.5, y: DK + 2.2 + k * 0.3, z: -19 + k, w: 3 + 2 * u2, h: 3 + 2 * u2, soft: true }); }
@@ -362,17 +366,28 @@ const fire = (cam: CamInfo, t: number, out: Stage) => {
     mover(cam, out, frW(i), x, z, 0, -1, t, { run: true, rate: 1.8, expr: i % 2 ? "shock" : "nervous" });
   }
   const u = clamp01((t - FALL0) / (FALL1 - FALL0));
-  if (t < FALL0) stand(cam, out, NAP(), NAP_FALL.x0, NAP_FALL.z, { expr: t < 26.1 ? "stern" : "shock", prop: ["flag", q((t * 0.9) % 1, 30)], blink: lidAt(t, 900) });
-  else if (t < FALL1 + 0.05) {
-    const x = NAP_FALL.x0 + (NAP_FALL.x1 - NAP_FALL.x0) * u, y = DK * (1 - u) + 1.5 * 4 * u * (1 - u);
-    out.places.push(person(cam, NAP(), x, y, NAP_FALL.z, FRONT, { mode: "fall", expr: "shock", tilt: -330 * u }, {}));
+  const HATLAND = FALL1 + 0.4;
+  if (t < FALL0) {
+    // anticipation: a bump from the runners, a squash before he goes
+    const k = clamp01((t - (FALL0 - 0.25)) / 0.25);
+    out.places.push({ ...person(cam, NAP(), NAP_FALL.x0, DK, NAP_FALL.z, FRONT, { mode: "stand", expr: t < 26.1 ? "stern" : "shock", prop: ["flag", q((t * 0.9) % 1, 30)], blink: lidAt(t, 900), tilt: -10 * k }, {}), sq: [1 + 0.12 * k, 1 - 0.1 * k] });
+    blob(out, NAP_FALL.x0, DK, NAP_FALL.z);
+  } else if (t < FALL1 + 0.05) {
+    const x = NAP_FALL.x0 + (NAP_FALL.x1 - NAP_FALL.x0) * u, y = DK * (1 - u) + 1.5 * 4 * u * (1 - u), s = Math.sin(Math.PI * u);
+    out.places.push({ ...person(cam, { i: 900, o: NAPHAT, okey: "napnh" }, x, y, NAP_FALL.z, FRONT, { mode: "fall", expr: "shock", tilt: -330 * u }, {}), sq: [1 - 0.12 * s, 1 + 0.2 * s] });
   } else {
-    const y = Math.max(SINK, 0 - (t - FALL1) * 4);
-    stand(cam, out, NAP(true), NAP_FALL.x1, NAP_FALL.z, { expr: "shock", blink: 0 }, y, false);
+    const y = Math.max(SINK, 0 - (t - FALL1) * 4), k = Math.max(0, 1 - (t - FALL1) / 0.25);
+    out.places.push({ ...person(cam, t < HATLAND ? { i: 900, o: MUDNH, okey: "napmnh" } : NAP(true), NAP_FALL.x1, y, NAP_FALL.z, FRONT, { mode: "stand", expr: "shock", blink: 0 }, {}), sq: [1 + 0.25 * k, 1 - 0.22 * k] });
+  }
+  // the hat flies higher and drops back onto his head
+  if (t >= FALL0 && t < HATLAND) {
+    const h = clamp01((t - FALL0) / (HATLAND - FALL0)), x = NAP_FALL.x0 + (NAP_FALL.x1 - NAP_FALL.x0) * h;
+    const y = (DK + 1.65) * (1 - h) + 0.5 * h + 3.2 * 4 * h * (1 - h);
+    out.fx.push({ key: "bicorne", cw: 300, ch: 160, draw: fxBicorne, x, y, z: NAP_FALL.z - 0.05, w: 0.62, h: 0.33, rot: 9 * h });
   }
   if (t >= FALL1 && t < FALL1 + 1.0) {
     const u2 = q((t - FALL1) / 1.0, 30);
-    out.fx.push({ key: `splash${u2}`, cw: 800, ch: 800, draw: (p) => fxSplash(p, u2), x: NAP_FALL.x1, y: 1.9, z: NAP_FALL.z, w: 5, h: 5 });
+    out.fx.push({ key: `msplash${u2}`, cw: 800, ch: 800, draw: (p) => fxSplash(p, u2, true), x: NAP_FALL.x1, y: 1.9, z: NAP_FALL.z, w: 5, h: 5 });
   }
 };
 const mud = (cam: CamInfo, t: number, out: Stage) => {
@@ -384,20 +399,20 @@ const mud = (cam: CamInfo, t: number, out: Stage) => {
     stand(cam, out, { i: 902 + k, o: OFFICER_FR, okey: "offr" }, 5.75, NAP_FALL.z + dz, { expr: "pained", blink: lidAt(t, 902 + k), tilt: 12 }, 0.02);
 };
 const think = (cam: CamInfo, t: number, out: Stage) => {
-  stand(cam, out, NAP(), 0, -45, { expr: t < 33.45 ? "stern" : "smile", blink: lidAt(t, 900), headTilt: t < 33.45 ? 5 : 0 });
+  stand(cam, out, NAP(), 0, -45, { expr: t < 33.45 ? "stern" : "grin", blink: lidAt(t, 900), headTilt: t < 33.45 ? 5 : 0, prop: t >= 33.4 ? "point" : null });
   column(cam, t, out, -47.6, 3, 1, { standing: true, expr: (i) => (i % 2 ? "dazed" : "neutral") });
   if (t >= 33.45) { const u = q(Math.min(1, (t - 33.45) / 0.6), 30); out.fx.push({ key: `bulb${u}`, cw: 300, ch: 400, draw: (p) => fxBulb(p, u), x: 0.15, y: DK + 2.6, z: -45, w: 0.6, h: 0.8 }); }
 };
 const ride = (cam: CamInfo, t: number, out: Stage) => {
   if (t < 37.4) reedRiders(cam, t, out, rideX(t), RIDE_Z, 1, RIDERS, false);
   else {
-    for (let i = 0; i < RIDERS; i++) horse(cam, out, i, 33 - 2.2 * (t - 37.4) + (i % 4) * 2.6, BLOW_Z + Math.floor(i / 4) * 2.4, -1, 0, t, { rate: 1.8 });
+    for (let i = 0; i < RIDERS; i++) horse(cam, out, i, 27 - 2.4 * (t - 37.4) + (i % 4) * 2.7 + Math.floor(i / 4) * 1.2, 19 + Math.floor(i / 4) * 2.3, -1, 0, t, { rate: 1.8, expr: "grin" });
     austrianLine(cam, t, out, { expr: "dazed" });
   }
 };
 const blow = (cam: CamInfo, t: number, out: Stage) => {
-  for (let i = 0; i < 4; i++) horse(cam, out, i, 27.5 - i * 2.6, BLOW_Z - 1.4 + i * 0.55, 0, -1, t, { trumpet: t >= 39.52 - L2, expr: t >= 40.45 - L2 ? "laugh" : "grin" });
-  for (let i = 4; i < RIDERS; i++) horse(cam, out, i, 26.5 - (i - 4) * 2.6, BLOW_Z + 1.6, 0, -1, t, { expr: "grin" });
+  for (let i = 0; i < 4; i++) horse(cam, out, i, 27.5 - i * 3.0, BLOW_Z - 1.4 + i * 1.25, 0, -1, t, { trumpet: t >= 39.52 - L2, expr: t >= 40.45 - L2 ? "laugh" : "grin" });
+  for (let i = 4; i < RIDERS; i++) horse(cam, out, i, 26.5 - (i - 4) * 3.0, BLOW_Z + 3.4 + (i - 4) * 1.0, 0, -1, t, { expr: "grin" });
 };
 const panic = (cam: CamInfo, t: number, out: Stage) => {
   let i = 0;
@@ -407,7 +422,9 @@ const panic = (cam: CamInfo, t: number, out: Stage) => {
     if (run) { mover(cam, out, who, x0 + (hh(i, 5) - 0.5) * 2, z + 5.2 * (t - 44.0), (hh(i, 5) - 0.5) * 0.4, 1, t, { run: true, rate: 1.9, expr: i % 2 ? "shock" : "nervous" }); continue; }
     const expr: Expr = panicked ? (i % 2 ? "shock" : "nervous") : heard ? "shock" : "neutral";
     const look = panicked ? (Math.floor(t * 6 + i) % 2 ? 1 : -1) : 0;
-    stand(cam, out, who, x0, z, { expr, look, blink: heard ? lidAt(t, who.i) : 0.5 });
+    const hop = heard ? 0.32 * Math.max(0, Math.sin(Math.PI * clamp01((t - 42.42 - hh(i, 6) * 0.08) / 0.32))) : 0;
+    out.places.push({ ...person(cam, who, x0, DK + hop, z, FRONT, { mode: "stand", expr, look, blink: heard ? lidAt(t, who.i) : 0.5 }, {}), sq: hop > 0.05 ? [0.92, 1.1] : undefined });
+    blob(out, x0, DK, z, 1, hop > 0.1 ? 0.6 : 1);
   }
 };
 const reeds = (cam: CamInfo, t: number, out: Stage) => {
@@ -437,7 +454,7 @@ const regiment = (cam: CamInfo, t: number, out: Stage) => {
   if (t >= 57.49 - L2) for (let i = 0; i < 26; i++) {
     const g = smooth((t - 57.42 - hh(i, 8) * 0.35) / 0.25);
     if (g <= 0.02) continue;
-    horse(cam, out, 40 + i, 10 + (i % 13) * 3.2 + hh(i) * 1.5, -21 - Math.floor(i / 13) * 3.5 - hh(i, 2) * 1.5, 1, 0, t, { ghost: "#2a2246", scale: 2.1 * g });
+    horse(cam, out, 40 + i, 9 + (i % 13) * 3.0 + hh(i) * 1.5, -20 - Math.floor(i / 13) * 3.2 - hh(i, 2) * 1.2, 1, 0, t, { ghost: "#2a2246", scale: 2.7 * g });
   }
 };
 const painter = (cam: CamInfo, t: number, out: Stage) => {
