@@ -1,0 +1,64 @@
+   0.40s  f   12  coo
+   1.95s  f   59  whoosh
+   2.40s  f   72  medal ding
+   3.63s  f  109  flash swell
+   5.00s  f  150  distant gun
+   6.48s  f  194  whoosh
+   6.60s  f  198  distant gun
+   6.90s  f  207  murmur
+   8.10s  f  243  distant gun
+   8.18s  f  246  whoosh
+   9.80s  f  294  hopeful
+  10.48s  f  314  whoosh
+  10.60s  f  318  shell whistle
+  11.05s  f  332  shell burst
+  11.20s  f  336  whoa
+  13.50s  f  405  shrug tuba
+  14.18s  f  426  whoosh
+  15.95s  f  478  basket coos
+  17.05s  f  512  flap
+  17.85s  f  536  shot
+  17.87s  f  536  feather poof
+  18.55s  f  556  flap
+  19.30s  f  579  shot
+  19.32s  f  580  feather poof
+  20.82s  f  625  hero sparkle
+  21.95s  f  658  takeoff flaps
+  22.45s  f  674  whoosh
+  22.95s  f  688  musket volley
+  23.78s  f  714  whoosh
+  24.10s  f  723  bullet whiz
+  26.04s  f  781  hit
+  26.12s  f  784  pigeon squawk
+  26.95s  f  808  hit
+  27.03s  f  811  pigeon squawk
+  28.09s  f  843  hit
+  28.17s  f  845  pigeon squawk
+  31.05s  f  932  landing thump
+  31.82s  f  955  whoosh
+  32.50s  f  975  paper
+  33.18s  f  995  whoosh
+  35.35s  f 1060  whoosh
+  35.50s  f 1065  field telephone
+  36.80s  f 1104  stop it shout
+  36.84s  f 1105  stop-it stab
+  39.10s  f 1173  map tossed
+  39.68s  f 1190  whoosh
+  40.50s  f 1215  home ding
+  41.02s  f 1230  whoosh
+  42.85s  f 1286  sun
+  43.65s  f 1310  magnetic hum
+  45.60s  f 1368  phone pop
+  48.98s  f 1470  whoosh
+  49.20s  f 1476  whittling
+  50.15s  f 1504  peg leg
+  52.00s  f 1560  applause
+  52.00s  f 1560  medal
+  53.40s  f 1602  visitors 'she'
+  55.00s  f 1650  she deflate
+  57.80s  f 1734  DNA ding
+  59.15s  f 1774  bow pops off
+  59.35s  f 1780  whoosh
+  59.90s  f 1797  visitors laugh
+  61.45s  f 1844  wink
+  62.30s  f 1869  final chord

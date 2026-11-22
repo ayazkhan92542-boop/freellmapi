@@ -1,0 +1,6 @@
+node_modules/
+out/
+.remotion-tmp/
+audio/_cache/
+audio/stem_*.wav
+audio/__pycache__/
