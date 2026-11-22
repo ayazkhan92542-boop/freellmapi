@@ -114,8 +114,8 @@ const CAMS: Record<number, Key[]> = {
   9: [
     { f: 888, s: (f) => zoom(at(LOFT, -7, 2.0, -22), at(LOFT, 0, 3.6, 0), 46, pushK(f, 888, 0.002)) },
     { f: 928, dur: 20, s: (f) => zoom(at(LOFT, -7, 2.0, -22), at(LOFT, 0, 4.2, -0.6), 26, pushK(f, 928, 0.002)) },
-    { f: 962, cut: true, s: (f) => dolly(at(LOFT, 1.4, 1.75, -4.8), at(LOFT, 0.2, 1.45, -1.6), pushK(f, 962, 0.003), { fov: 42 }) },
-    { f: 1003, cut: true, s: (f) => dolly(at(LOFT, 0.35, 1.45, -3.3), at(LOFT, 0.15, 1.35, -1.75), pushK(f, 1003, 0.0018), { fov: 40 }) },
+    { f: 962, cut: true, s: (f) => dolly(at(LOFT, 1.4, 1.75, -7.0), at(LOFT, 0.2, 1.45, -3.8), pushK(f, 962, 0.003), { fov: 42 }) },
+    { f: 1003, cut: true, s: (f) => dolly(at(LOFT, 0.35, 1.45, -5.5), at(LOFT, 0.15, 1.35, -3.95), pushK(f, 1003, 0.0018), { fov: 40 }) },
     { f: 1068, cut: true, s: (f) => dolly(at(HQ, -4.8, 1.75, 6.0), at(HQ, -6, 1.4, 9), pushK(f, 1068, 0.003, 0.008, 35), { fov: 42, roll: 0.04 }) },
   ],
   10: [
