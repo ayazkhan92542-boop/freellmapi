@@ -370,7 +370,7 @@ const legend = (cam: CamInfo, t: number, out: Stage) => {
   const x = HERO[0] + 2.2 * (t - 40.8);
   car(cam, out, 0, RAMESSES, x, HERO[2], 1, 0, t, { rate: 2.4, expr: "stern", egypt: true, dust: true });
   const g = q(((t * 2) % 1), 20);
-  out.fx.push({ key: `glow${g}`, cw: 500, ch: 500, draw: (p) => fxBurst(p, g, "#fff3b0", 14, 60, 240), x: x - 0.6, y: 2.4, z: HERO[2] - 0.2, w: 3.4, h: 3.4 });
+  out.fx.push({ key: `glow${g}`, cw: 500, ch: 500, draw: (p) => fxBurst(p, g, "#fff3b0", 14, 60, 240), x: x - 1.3, y: 3.4, z: HERO[2] + 2.5, w: 2.6, h: 2.6 });
   for (let i = 0; i < 24; i++) stand(cam, out, hiW(i), HERO[0] + 11 + (i % 6) * 1.2 + hh(i) * 0.4, HERO[2] - 2 + Math.floor(i / 6) * 1.3, { expr: t > 42.5 ? "shock" : "nervous", blink: lidAt(t, i + 300) });
 };
 const rescue = (cam: CamInfo, t: number, out: Stage) => {
