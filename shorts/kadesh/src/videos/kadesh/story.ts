@@ -92,8 +92,8 @@ const CAMS: Record<number, Key[]> = {
     { f: 410, cut: true, s: (f) => { const z = -40 + 1.3 * (T(f) - 13.67); return dolly([11, 2.4, z - 1], [0, 1.3, z + 1.2], pushK(f, 410, 0.0015), { fov: 50 }); } },
   ],
   3: [
-    { f: 513, s: (f) => dolly(at(CAMP, 3.2, 1.7, -6.5), at(CAMP, 0.6, 1.25, 0), pushK(f, 513, 0.0022), { fov: 44 }) },
-    { f: 636, dur: 22, s: (f) => dolly(at(CAMP, 2.0, 1.6, -4.4), at(CAMP, 0.9, 1.6, 0.3), pushK(f, 636, 0.0025), { fov: 40, roll: 0.03 }) },
+    { f: 513, s: (f) => dolly(at(CAMP, 1.6, 1.8, -7.6), at(CAMP, -1.4, 1.3, 0), pushK(f, 513, 0.0022), { fov: 46 }) },
+    { f: 636, dur: 22, s: (f) => dolly(at(CAMP, 1.0, 1.75, -5.6), at(CAMP, -0.6, 1.7, 0.2), pushK(f, 636, 0.0025), { fov: 44, roll: 0.03 }) },
   ],
   4: [
     { f: 699, s: (f) => dolly(at(CAMP, 0.6, 1.75, -3.4), at(CAMP, 0, 1.45, 0.5), pushK(f, 699, 0.003, 0.008, 30), { fov: 40 }) },
@@ -129,7 +129,7 @@ const CAMS: Record<number, Key[]> = {
   ],
   14: [
     { f: 2062, s: (f) => dolly(at(CAMP, 0.5, 1.75, -4.2), at(CAMP, 0, 1.3, 0.6), pushK(f, 2062, 0.0025), { fov: 44 }) },
-    { f: 2130, dur: 24, s: (f) => dolly(at(CAMP, 0.2, 1.6, -2.4), at(CAMP, 0, 1.05, 0.5), pushK(f, 2130, 0.003), { fov: 40, roll: 0.03 }) },
+    { f: 2130, dur: 24, s: (f) => dolly(at(CAMP, 0.2, 1.6, -3.2), at(CAMP, 0, 1.2, 0.5), pushK(f, 2130, 0.003), { fov: 42, roll: 0.03 }) },
   ],
   15: [
     { f: 2215, s: (f) => zoom(at(UN, 0, 1.7, -7), at(UN, 0, 2.0, 6), 50, pushK(f, 2215, 0.002)) },

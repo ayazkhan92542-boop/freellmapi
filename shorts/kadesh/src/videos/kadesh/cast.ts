@@ -408,7 +408,7 @@ const treaty = (cam: CamInfo, t: number, out: Stage) => {
   const [cx, , cz] = CAMP;
   stand(cam, out, RAM, cx - 0.85, cz + 0.8, { expr: "smile", prop: "hold", blink: lidAt(t, 900), facing: 1 });
   stand(cam, out, KING, cx + 0.85, cz + 0.8, { expr: "smile", prop: "hold", blink: lidAt(t, 901), facing: -1 });
-  out.fx.push({ key: "tablet", cw: 500, ch: 640, draw: fxTablet, x: cx, y: 1.05, z: cz + 0.55, w: 0.42, h: 0.54 });
+  out.fx.push({ key: "tablet", cw: 500, ch: 640, draw: fxTablet, x: cx, y: 0.92, z: cz + 0.6, w: 0.34, h: 0.44 });
   burst(out, t, 71.25 - L2, cx, 1.3, cz + 0.4, 0.9, 0.4);
 };
 const un = (cam: CamInfo, t: number, out: Stage) => {
