@@ -1,0 +1,58 @@
+   1.42s  f   42  whoosh
+   1.68s  f   50  hook trumpets
+   3.97s  f  119  flash swell
+   7.28s  f  218  whoosh
+  10.05s  f  302  belly growl
+  10.50s  f  315  belly growl
+  10.55s  f  316  whoosh
+  11.00s  f  330  belly growl
+  13.20s  f  396  charge shout
+  16.28s  f  489  whoosh
+  17.82s  f  535  musket volley
+  18.00s  f  540  whoa
+  19.55s  f  586  flag
+  19.60s  f  588  grab stab
+  20.38s  f  612  whoosh
+  22.90s  f  687  stab
+  22.92s  f  688  musket volley
+  23.32s  f  700  whoosh
+  24.22s  f  727  aide shot
+  24.25s  f  728  stab
+  24.30s  f  729  aide oof
+  25.18s  f  756  whoosh
+  25.45s  f  764  stab
+  26.45s  f  794  napoleon whoa
+  26.50s  f  795  hat flies
+  26.98s  f  809  mud splash
+  27.05s  f  812  tuba deflate
+  27.30s  f  819  squelch
+  27.38s  f  821  hat lands
+  28.20s  f  846  mud bubble
+  29.40s  f  882  mud bubble
+  30.30s  f  909  mud bubble
+  30.45s  f  914  whoosh
+  31.50s  f  945  pulled out
+  32.50s  f  975  dawn pad
+  33.48s  f 1004  idea ding
+  34.40s  f 1032  reeds rustle
+  37.18s  f 1116  whoosh
+  39.45s  f 1184  trumpet charge
+  41.30s  f 1239  trumpet high
+  42.45s  f 1274  austrian gasp
+  43.60s  f 1308  panic babble
+  43.82s  f 1314  whoosh
+  45.00s  f 1350  reed rustle
+  47.82s  f 1434  whoosh
+  48.60s  f 1458  distant trumpet
+  50.30s  f 1509  night pad
+  50.30s  f 1509  street footsteps
+  52.35s  f 1570  whoosh
+  53.78s  f 1614  whoosh
+  54.05s  f 1622  looming shadow
+  55.50s  f 1665  far trumpets
+  57.48s  f 1724  cymbal crash
+  57.50s  f 1725  imagined regiment
+  61.05s  f 1832  legend sparkle
+  66.02s  f 1980  whoosh
+  66.40s  f 1992  muddy Napoleon
+  67.45s  f 2024  final deflate

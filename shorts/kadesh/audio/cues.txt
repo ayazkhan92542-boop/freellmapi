@@ -1,0 +1,39 @@
+   1.38s  f   42  whoosh
+   1.63s  f   49  chariot crash
+   1.70s  f   51  crash slide
+   1.80s  f   54  Ramesses oof
+   5.45s  f  164  whoosh
+   5.80s  f  174  chisel
+   7.72s  f  232  victory sparkle
+   8.43s  f  253  flash swell
+  13.42s  f  402  whoosh
+  13.80s  f  414  war horn
+  20.95s  f  628  whoosh
+  21.00s  f  630  bubble pop
+  23.80s  f  714  Ramesses cheer
+  24.75s  f  742  whoosh
+  27.28s  f  818  whoosh
+  27.55s  f  826  tents pop
+  29.00s  f  870  disguise off
+  29.20s  f  876  spy stab
+  29.30s  f  879  uh-oh tuba
+  30.60s  f  918  Hittite war cry
+  33.48s  f 1004  whoosh
+  33.85s  f 1016  soldiers bowled over
+  36.45s  f 1094  tent crash
+  40.58s  f 1218  whoosh
+  42.95s  f 1288  heroic hit
+  43.85s  f 1316  rescue horns
+  47.00s  f 1410  nobody won
+  47.20s  f 1416  groans
+  50.25s  f 1508  whoosh
+  50.60s  f 1518  Hittites cheer
+  55.18s  f 1656  whoosh
+  55.50s  f 1665  tilt up the wall
+  59.85s  f 1796  outtake torn off
+  59.90s  f 1797  outtake deflate
+  65.35s  f 1960  whoosh
+  67.72s  f 2032  giant reveal
+  68.90s  f 2067  treaty
+  71.20s  f 2136  treaty sparkle
+  77.60s  f 2328  final chord
