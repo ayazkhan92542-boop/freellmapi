@@ -83,13 +83,13 @@ const at = (b: V3, dx: number, dy: number, dz: number): V3 => [b[0] + dx, b[1] +
 export const HERO: V3 = [40, 0, -30];
 const CAMS: Record<number, Key[]> = {
   1: [
-    { f: 0, s: (f) => dolly(at(HERO, 1.2, 1.9, -5.8), at(HERO, 0.6, 1.9, 0), pushK(f, 0, 0.003), { fov: 42, roll: 0.03 }) },
+    { f: 0, s: (f) => dolly(at(HERO, -0.3, 2.0, -5.6), at(HERO, -0.9, 1.95, 0), pushK(f, 0, 0.003), { fov: 42, roll: 0.03 }) },
     { f: 49, cut: true, s: (f) => dolly(at(HERO, 6.5, 1.2, -6.5), at(HERO, 5.0, 0.6, 0), pushK(f, 49, 0.0025, 0.007, 30), { fov: 44, roll: -0.05 }) },
     { f: 171, cut: true, s: (f) => zoom(at(TEMPLE, 0, 3.0, -16), at(TEMPLE, 0, 4.5 + 2.0 * clamp01((f - 171) / 80), 10), 50, pushK(f, 171, 0.002)) },
   ],
   2: [
     { f: 261, s: (f) => zoom([-55, 42, -40], [0, 0, 60], 46, pushK(f, 261, 0.0018)) },
-    { f: 410, cut: true, s: (f) => { const z = -40 + 1.3 * (T(f) - 13.67); return dolly([7.5, 1.6, z + 2], [0, 1.4, z + 4], pushK(f, 410, 0.0015), { fov: 46 }); } },
+    { f: 410, cut: true, s: (f) => { const z = -40 + 1.3 * (T(f) - 13.67); return dolly([11, 2.4, z - 1], [0, 1.3, z + 1.2], pushK(f, 410, 0.0015), { fov: 50 }); } },
   ],
   3: [
     { f: 513, s: (f) => dolly(at(CAMP, 3.2, 1.7, -6.5), at(CAMP, 0.6, 1.25, 0), pushK(f, 513, 0.0022), { fov: 44 }) },
@@ -105,12 +105,12 @@ const CAMS: Record<number, Key[]> = {
     { f: 911, s: (f) => zoom([22, 3.2, 38], [10, MOUND_H + 2, 78], 48, pushK(f, 911, 0.002)) },
     { f: 1012, cut: true, s: (f) => dolly([ARMY2_X + 10, 2.2, 2], [ARMY2_X, 1.2, 6], pushK(f, 1012, 0.002), { fov: 50, roll: 0.04 }) },
   ],
-  7: [{ f: 1079, s: (f) => dolly(at(CAMP, 7.5, 2.4, -9), at(CAMP, 0, 1.4, 0), pushK(f, 1079, 0.002), { fov: 48, roll: -0.04 }) }],
+  7: [{ f: 1079, s: (f) => dolly(at(CAMP, 6.5, 2.6, -6), at(CAMP, 2.5, 1.3, 4.5), pushK(f, 1079, 0.002), { fov: 50, roll: -0.04 }) }],
   8: [
     { f: 1130, s: (f) => dolly(at(CAMP, 1.0, 1.8, -7.5), at(CAMP, 0, 1.4, 2), pushK(f, 1130, 0.002), { fov: 46 }) },
     { f: 1225, cut: true, s: (f) => dolly(at(HERO, 2.8, 1.5, -6.6), at(HERO, 2.0, 1.9, 0), pushK(f, 1225, 0.002, 0.006, 30), { fov: 44, roll: 0.05 }) },
   ],
-  9: [{ f: 1311, s: (f) => zoom([20, 2.2, -64], [0, 2.5, -42], 46, pushK(f, 1311, 0.002)) }],
+  9: [{ f: 1311, s: (f) => zoom([12, 2.0, -56], [0, 2.0, -38], 46, pushK(f, 1311, 0.002)) }],
   10: [
     { f: 1404, s: (f) => dolly([6, 2.0, 24], [0, 1.0, 32], pushK(f, 1404, 0.002), { fov: 46 }) },
     { f: 1515, cut: true, s: (f) => zoom([-6, 3, 52], [0, MOUND_H + 3.5, 72], 36, pushK(f, 1515, 0.0025, 0.006, 30)) },

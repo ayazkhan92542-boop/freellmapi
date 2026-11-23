@@ -172,7 +172,7 @@ export class World {
       b.add(g, i % 2 ? sand : sandDark, new THREE.Matrix4().compose(V(x, -0.2, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), rand(i * 5) * 3), V(s * 1.6, 1.5 + rand(i * 7) * 2.5, s)));
     }
     // big dune behind the rescue army
-    { const g = new THREE.SphereGeometry(1, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2); b.add(g, sandDark, new THREE.Matrix4().compose(V(0, -0.5, -58), new THREE.Quaternion(), V(30, 4.5, 10))); }
+    { const g = new THREE.SphereGeometry(1, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2); b.add(g, sandDark, new THREE.Matrix4().compose(V(0, -0.5, -24), new THREE.Quaternion(), V(30, 4.0, 9))); }
     const palm = (x: number, z: number, h: number) => {
       if (nearLens(x, z, 5)) return;
       b.add(new THREE.CylinderGeometry(0.18, 0.28, h, 8).translate(x, h / 2, z), trunk);
@@ -198,9 +198,9 @@ export class World {
     const [cx, , cz] = CAMP;
     const tentTex = ctex("tentStripe", 256, 256, (g) => { for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? "#c8323a" : "#f4ecd8"; g.fillRect(i * 32, 0, 32, 256); } });
     const tentM = lam("tentM", () => ({ map: tentTex, side: THREE.DoubleSide }));
-    const tentSpots: [number, number, number][] = [[1.6, 0.9, 1.5], [-6, 5, 1], [5, 6, 1], [-9, -3, 1], [8, -2, 1], [-3, 10, 1], [10, 9, 1], [-11, 9, 1]];
+    const tentSpots: [number, number, number][] = [[3.5, 4.5, 1.3], [-7, 7, 1], [6, 10, 1], [-10, -3, 1], [-4, 12, 1], [11, 11, 1], [-12, 9, 1], [12, 3, 1]];
     for (const [dx, dz, s] of tentSpots) {
-      if (nearLens(cx + dx, cz + dz, 2.2)) continue;
+      if (nearLens(cx + dx, cz + dz, 6.5) || blocks(cx + dx - 2.4 * s, cx + dx + 2.4 * s, 0, 2.8 * s, cz + dz - 2.4 * s, cz + dz + 2.4 * s, true)) continue;
       const g = new THREE.ConeGeometry(2.4 * s, 2.8 * s, 4, 1, true); g.rotateY(Math.PI / 4); g.translate(0, 1.4 * s, 0);
       const m = new THREE.Mesh(g, tentM); m.position.set(cx + dx, 0, cz + dz); m.castShadow = true; m.receiveShadow = true;
       this.tents.push(m); R.add(m);

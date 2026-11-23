@@ -353,7 +353,7 @@ const charge = (cam: CamInfo, t: number, out: Stage) => {
 };
 const campCrash = (cam: CamInfo, t: number, out: Stage) => {
   const [cx, , cz] = CAMP;
-  car(cam, out, 30, hittite(1), cx + 9 - 9.5 * (t - 35.95), cz + 0.6, -1, 0, t, { rate: 2.6, expr: "laugh", dust: true });
+  car(cam, out, 30, hittite(1), cx + 12 - 9.5 * (t - 35.95), cz + 4.5, -1, 0, t, { rate: 2.6, expr: "laugh", dust: true });
   for (let i = 0; i < 6; i++) mover(cam, out, egW(i + 50), cx - 2 - (i % 3) * 1.4 - 3 * Math.max(0, t - 36.4), cz - 2 + Math.floor(i / 3) * 3, -1, 0, t, { run: true, rate: 2, expr: "shock" });
 };
 const legend = (cam: CamInfo, t: number, out: Stage) => {
@@ -375,7 +375,7 @@ const legend = (cam: CamInfo, t: number, out: Stage) => {
 };
 const rescue = (cam: CamInfo, t: number, out: Stage) => {
   motes(out, cam, t);
-  for (let i = 0; i < 21; i++) { const r = Math.floor(i / 7), x = -6 + (i % 7) * 2 + hh(i) * 0.4, z = -40 - r * 1.6 - 2.2 * (t - 43.8); mover(cam, out, egW(i), x, z, 0, -1, t, { rate: 1.6, expr: i % 3 ? "grin" : "stern", fo: i === 3 ? { prop: "fist" } : undefined }); }
+  for (let i = 0; i < 21; i++) { const r = Math.floor(i / 7), x = -6 + (i % 7) * 2 + hh(i) * 0.4, z = -36 - r * 1.6 - 2.2 * (t - 43.8); mover(cam, out, egW(i), x, z, 0, -1, t, { rate: 1.6, expr: i % 3 ? "grin" : "stern", fo: i === 3 ? { prop: "fist" } : undefined }); }
 };
 const draw = (cam: CamInfo, t: number, out: Stage) => {
   if (t < 50.45) {

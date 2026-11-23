@@ -1651,7 +1651,7 @@ export const fxDust = (p: Pen, t: number) => {
 };
 /** sand motes drifting (soft specks), 600 x 600 */
 export const fxMotes = (p: Pen, seed: number) => {
-  for (let i = 0; i < 40; i++) { const x = (Math.sin(i * 12.9898 + seed) * 43758.5453 % 1 + 1) % 1, y = (Math.sin(i * 78.233 + seed) * 12345.678 % 1 + 1) % 1; p.ell(x * 600, y * 600, 3 + (i % 3), 3 + (i % 3), "#fff1cf", 0); }
+  p.g.globalAlpha = 0.45; for (let i = 0; i < 30; i++) { const x = (Math.sin(i * 12.9898 + seed) * 43758.5453 % 1 + 1) % 1, y = (Math.sin(i * 78.233 + seed) * 12345.678 % 1 + 1) % 1; p.ell(x * 600, y * 600, 1.2 + (i % 2) * 0.6, 1.2 + (i % 2) * 0.6, "#f7e2b0", 0); } p.g.globalAlpha = 1;
 };
 /** copper replica of the treaty tablet (wedge-like marks, no legible text), 500 x 640 */
 export const fxTablet = (p: Pen) => {
